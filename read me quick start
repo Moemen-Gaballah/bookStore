@@ -1,0 +1,37 @@
+// install project laravel
+1- laravel new storeBook
+
+// install ui
+2- composer require laravel/ui
+
+// install Vue
+3- php artisan ui vue
+
+// Install Vue with auth
+4-  php artisan ui vue --auth
+
+// You also need to install npm and run it. so let's run both command:
+// Install NPM
+5- npm install
+
+6- npm run dev
+
+// make seeder for users
+7- php artisan make:seeder UserSeeder
+
+// run migration with seeds
+8-  php artisan migrate:fresh --seed
+
+// error  @ development: `mix` after run npm dev
+9- //First run:
+
+rm -rf node_modules
+rm package-lock.json yarn.lock
+npm cache clear --force
+
+//Then run the command:
+npm install cross-env
+npm install
+
+//and then you can also run:
+npm run dev
