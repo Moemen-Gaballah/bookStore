@@ -35,3 +35,9 @@ npm install
 
 //and then you can also run:
 npm run dev
+
+// install adminlte
+npm install admin-lte@v3.0.0-alpha.2 --save
+
+// install fontawesome
+npm install --save @fortawesome/fontawesome-free
