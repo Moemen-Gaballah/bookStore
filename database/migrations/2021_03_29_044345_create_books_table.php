@@ -15,7 +15,16 @@ class CreateBooksTable extends Migration
     {
         Schema::create('books', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('author');
+            $table->string('image')->nullable();
+            $table->bigInteger('category_id')->unsigned();
+            $table->double('price', 8, 2);
+            $table->boolean('status')->default('1');
+            $table->integer('stock')->nullable();
             $table->timestamps();
+
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });
     }
 

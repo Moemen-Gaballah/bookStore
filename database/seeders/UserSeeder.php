@@ -21,5 +21,20 @@ class UserSeeder extends Seeder
             'role' => 'admin',
         ]);
 
+        $user = \App\Models\User::create([
+            'name' => 'user',
+            'email' => 'user@gmail.com',
+            'password' => bcrypt('123456'),
+            'role' => 'user',
+        ]);
+
+        $user = \App\Models\User::create([
+            'name' => 'eslam',
+            'email' => 'elsam@gmail.com',
+            'password' => bcrypt('123456'),
+            'role' => 'user',
+        ]);
+
+
     }
 }

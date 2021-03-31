@@ -30,15 +30,15 @@
                             <img src="img/book/01.png">
                             <div class="description">
                                 <h3 class="title">
-                                    {{ cartItems.name }}
+                                    شكل الافكار
                                 </h3>
                                 <p class="price">
-                                    {{ cartItems.price }}
+                                    216.83
                                     ج.م
                                 </p>
                                 <p class="totlePriceOneProduct">
                                     الاجمالى
-                                    {{ (cartItems.price *  cartItems.count).toFixed(2)}}
+                                    433
                                     ج.م
                                 </p>
                             </div>
@@ -46,13 +46,13 @@
                                 <p>
                                     الكمية<span class="text-danger ml-5">*</span>
                                 </p>
-                                <span @click="increaseItem" class="plus">
+                                <span class="plus">
                                     +
                                 </span>
                                 <span class="count">
-                                    {{ cartItems.count }}
+                                    4
                                 </span>
-                                <span @click="decreaseItem" class="minus">
+                                <span class="minus">
                                     -
                                 </span>
                             </div>
@@ -197,36 +197,120 @@
 
 <script>
     export default {
-        data() {
-          return {
-            carts: {},
-            token: null,
-            len:0,
-            totalcost:0,
-            cartItems : {
-                name: 'شكل الافكار',
-                count: 1,
-                price: 216.83
+      data() {
+        return {
+          carts: null,
+          token: null,
+          len:0,
+          totalcost:0,
+          cartItem : [],
+          Id:-1
+        }
+      },
+      name: 'Cart',
+      props: ["baseURL"],
+      methods:
+      addProduct(){
+        if(localStorage.getItem('cartItem')){
+            cartItem = JSON.parse(localStorage.getItem('cartItem'))
+        }
+        cartItem.push({'productId' : productId + 1})
+        localStorage.setItem('cartItem', JSON.stringify(cartItem))
+    },
+    removeProduct(productId){
+
+        // Your logic for your app.
+
+        // strore products in local storage
+
+        let storageCartItem = JSON.parse(localStorage.getItem('cartItem'));
+        let cartItem = storageCartItem.filter(product => product.productId !== productId );
+        localStorage.setItem('cartItem', JSON.stringify(cartItem));
+    },
+
+      {
+         isDisabled(){
+           if(this.len === 0){
+             return true;
+           }
+           return false;
+         },
+         showDetails(itr){
+          this.$router.push({ name: 'ShowDetails', params: { id : this.cartItem[itr].pId } })
+         },
+         checkout(){
+          this.$router.push({ name: 'Checkout',params:{id:this.len}})
+         },
+         listCartItems(){
+          axios.get(`${this.baseURL}cart/?token=${this.token}`).then((response) => {
+            if(response.status==200){
+              this.carts=response.data;
+              this.len = Object.keys(this.carts.cartItems).length
+              this.totalcost = this.carts.totalCost
+              let i;
+              for(i=0;i<this.len;i++){
+                this.cartItem.push({
+                  imgUrl:this.carts.cartItems[i].product.imageURL,
+                  pName:this.carts.cartItems[i].product.name,
+                  pDescription:this.carts.cartItems[i].product.description,
+                  pPrice:this.carts.cartItems[i].product.price,
+                  pQuantity:this.carts.cartItems[i].quantity ,
+                  id:this.carts.cartItems[i].id,
+                  pId:this.carts.cartItems[i].product.id,
+                  userId:this.carts.cartItems[i].userId
+                })
+              }
             }
+          },
+          (error)=>{
+            console.log(error)
+          });
+        },
+        deleteItem(productId){
+          // axios.delete(`${this.baseURL}cart/delete/${itemId}/?token=${this.token} `)
+          //   .then((response)=>{
+          //     if(response.status==200){
+          //       this.$router.go(0);
+          //     }
+          //   },(error)=>{
+          //     console.log(error)
+          //   })
+          // Your logic for your app.
+
+          // strore products in local storage
+
+          let storageCartItem = JSON.parse(localStorage.getItem('cartItem'));
+          let cartItem = storageCartItem.filter(product => product.productId !== productId );
+          localStorage.setItem('cartItem', JSON.stringify(cartItem));
+        },
+        updateItem(itemId,quantity){
+          // let i
+          // for(i=0;i<this.len;i++){
+          //   if(this.cartItem[i].id === itemId){
+          //     break
+          //   }
+          // }
+          // this.cartItem[i].pQuantity = quantity
+          // let userId = this.cartItem[i].userId
+          // let productId = this.cartItem[i].pId
+          // axios.put(`${this.baseURL}cart/update/${itemId}/?token=${this.token}`,{
+          //   id:itemId,
+          //   userId,
+          //   productId,
+          //   quantity
+          // })
+
+          if(localStorage.getItem('cartItem')){
+              cartItem = JSON.parse(localStorage.getItem('cartItem'));
           }
-        },
-        methods: {
-            // loadCart() {
-            //     this.carts = JSON.parse(sessionStorage.getItem('shoppingCart'));
-            // },
-
-            increaseItem () {
-                this.cartItems.count +=1
-            },
-
-            decreaseItem () {
-                if( this.cartItems.count > 0){
-                    this.cartItems.count -=1
-                }
-            }
-        },
-        created() {
+          cartItem.push({'productId' : productId + 1});
+          localStorage.setItem('cartItem', JSON.stringify(cartItem));
 
         }
+      },
+      mounted() {
+        this.token = localStorage.getItem("token");
+        this.listCartItems();
+      },
     };
 </script>

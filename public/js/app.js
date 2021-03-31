@@ -3238,10 +3238,31 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      carts: {}
+      carts: {},
+      token: null,
+      len: 0,
+      totalcost: 0,
+      cartItems: {
+        name: 'شكل الافكار',
+        count: 1,
+        price: 216.83
+      }
     };
   },
-  methods: {}
+  methods: {
+    // loadCart() {
+    //     this.carts = JSON.parse(sessionStorage.getItem('shoppingCart'));
+    // },
+    increaseItem: function increaseItem() {
+      this.cartItems.count += 1;
+    },
+    decreaseItem: function decreaseItem() {
+      if (this.cartItems.count > 0) {
+        this.cartItems.count -= 1;
+      }
+    }
+  },
+  created: function created() {}
 });
 
 /***/ }),
@@ -45527,99 +45548,133 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "cart mb-5" }, [
+    _c("div", { staticClass: "container" }, [
+      _vm._m(0),
+      _vm._v(" "),
+      _c("div", { staticClass: "row" }, [
+        _vm._m(1),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-12 mt-5" }, [
+          _c("div", { staticClass: "content" }, [
+            _c("div", { staticClass: "box" }, [
+              _vm._m(2),
+              _vm._v(" "),
+              _c("img", { attrs: { src: "img/book/01.png" } }),
+              _vm._v(" "),
+              _c("div", { staticClass: "description" }, [
+                _c("h3", { staticClass: "title" }, [
+                  _vm._v(
+                    "\n                                " +
+                      _vm._s(_vm.cartItems.name) +
+                      "\n                            "
+                  )
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "price" }, [
+                  _vm._v(
+                    "\n                                " +
+                      _vm._s(_vm.cartItems.price) +
+                      "\n                                ج.م\n                            "
+                  )
+                ]),
+                _vm._v(" "),
+                _c("p", { staticClass: "totlePriceOneProduct" }, [
+                  _vm._v(
+                    "\n                                الاجمالى\n                                " +
+                      _vm._s(
+                        (_vm.cartItems.price * _vm.cartItems.count).toFixed(2)
+                      ) +
+                      "\n                                ج.م\n                            "
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "quantity text-center" }, [
+                _vm._m(3),
+                _vm._v(" "),
+                _c(
+                  "span",
+                  { staticClass: "plus", on: { click: _vm.increaseItem } },
+                  [
+                    _vm._v(
+                      "\n                                +\n                            "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c("span", { staticClass: "count" }, [
+                  _vm._v(
+                    "\n                                " +
+                      _vm._s(_vm.cartItems.count) +
+                      "\n                            "
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "span",
+                  { staticClass: "minus", on: { click: _vm.decreaseItem } },
+                  [
+                    _vm._v(
+                      "\n                                -\n                            "
+                    )
+                  ]
+                )
+              ])
+            ])
+          ])
+        ])
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "cart mb-5" }, [
-      _c("div", { staticClass: "container" }, [
-        _c("p", { staticClass: "path" }, [
-          _c("i", { staticClass: "fas fa-home" }),
-          _vm._v(" "),
-          _c("a", { attrs: { href: "/" } }, [
-            _vm._v("\n                الرئيسية\n             ")
-          ]),
-          _vm._v("\n            >\n            السلة\n        ")
+    return _c("p", { staticClass: "path" }, [
+      _c("i", { staticClass: "fas fa-home" }),
+      _vm._v(" "),
+      _c("a", { attrs: { href: "/" } }, [
+        _vm._v("\n                الرئيسية\n             ")
+      ]),
+      _vm._v("\n            >\n            السلة\n        ")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-12" }, [
+      _c("div", { staticClass: "makeHr" }, [
+        _c("span", { staticClass: "tickMark" }, [
+          _vm._v("\n                        ✔\n                    ")
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-12" }, [
-            _c("div", { staticClass: "makeHr" }, [
-              _c("span", { staticClass: "tickMark" }, [
-                _vm._v("\n                        ✔\n                    ")
-              ]),
-              _vm._v(" "),
-              _c("hr"),
-              _vm._v(" "),
-              _c("span", { staticClass: "second" }, [
-                _vm._v("\n                        2\n                    ")
-              ])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-12 mt-5" }, [
-            _c("div", { staticClass: "content" }, [
-              _c("div", { staticClass: "box" }, [
-                _c("span", { staticClass: "remove" }, [
-                  _c("i", { staticClass: "far fa-times-circle text-danger" })
-                ]),
-                _vm._v(" "),
-                _c("img", { attrs: { src: "img/book/01.png" } }),
-                _vm._v(" "),
-                _c("div", { staticClass: "description" }, [
-                  _c("h3", { staticClass: "title" }, [
-                    _vm._v(
-                      "\n                                شكل الافكار\n                            "
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("p", { staticClass: "price" }, [
-                    _vm._v(
-                      "\n                                216.83\n                                ج.م\n                            "
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("p", { staticClass: "totlePriceOneProduct" }, [
-                    _vm._v(
-                      "\n                                الاجمالى\n                                433\n                                ج.م\n                            "
-                    )
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "quantity text-center" }, [
-                  _c("p", [
-                    _vm._v("\n                                الكمية"),
-                    _c("span", { staticClass: "text-danger ml-5" }, [
-                      _vm._v("*")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "plus" }, [
-                    _vm._v(
-                      "\n                                +\n                            "
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "count" }, [
-                    _vm._v(
-                      "\n                                4\n                            "
-                    )
-                  ]),
-                  _vm._v(" "),
-                  _c("span", { staticClass: "minus" }, [
-                    _vm._v(
-                      "\n                                -\n                            "
-                    )
-                  ])
-                ])
-              ])
-            ])
-          ])
+        _c("hr"),
+        _vm._v(" "),
+        _c("span", { staticClass: "second" }, [
+          _vm._v("\n                        2\n                    ")
         ])
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { staticClass: "remove" }, [
+      _c("i", { staticClass: "far fa-times-circle text-danger" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("p", [
+      _vm._v("\n                                الكمية"),
+      _c("span", { staticClass: "text-danger ml-5" }, [_vm._v("*")])
     ])
   }
 ]
