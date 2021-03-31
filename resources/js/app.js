@@ -28,6 +28,8 @@ Vue.component('Slider', require('./components/layouts/Slider.vue').default);
 Vue.component('SliderProducts', require('./components/layouts/SliderProducts.vue').default);
 Vue.component('FeaturePayment', require('./components/layouts/FeaturePayment.vue').default);
 Vue.component('Testimonials', require('./components/layouts/Testimonials.vue').default);
+Vue.component('AppFooter', require('./components/layouts/AppFooter.vue').default);
+Vue.component('Category', require('./components/pages/frontend/Category.vue').default);
 
 
 
@@ -62,8 +64,9 @@ $(document).ready(function()
                 0:{items:1},
                 575:{items:2},
                 768:{items:3},
-                991:{items:4},
-                1199:{items:6}
+                991:{items:4}
+                // ,
+                // 1199:{items:6}
             }
         });
 
@@ -99,13 +102,13 @@ if($('.slider_testimonial').length)
             loop:true,
             margin:30,
             autoplay:true,
-            autoplayTimeout:5000,
+            autoplayTimeout:4000,
             nav:false,
             dots:false,
             responsive:
             {
                 0:{items:1},
-                575:{items:2}
+                768:{items:2}
                 // ,
                 // 768:{items:3},
                 // 991:{items:4},
@@ -114,6 +117,9 @@ if($('.slider_testimonial').length)
     });
 
 }
+
+
+
 
 
 });

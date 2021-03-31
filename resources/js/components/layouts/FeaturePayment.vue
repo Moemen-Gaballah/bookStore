@@ -20,13 +20,6 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <!-- <div class="card">
-                    <div class="card-header">Example Component</div>
-
-                    <div class="card-body">
-                        I'm an example component.
-                    </div>
-                </div> -->
                 <div class="card">
                   <div class="card-body">
                        <p><i class="fas fa-book fa-2x text-white"></i></p>
@@ -43,10 +36,18 @@
     .box-payment {
         direction: rtl;
     }
+
+    /* .box-payment > div{
+        box-shadow: 5px 10px #888888;
+    } */
+
     .box-payment .card{
         background-color: #00A99D;
         color: #E5F6F5;
         width: 100%;
+        /* box-shadow: 0px 2px #888888;
+         */
+         box-shadow: 0 8px 18px 0 rgb(0 0 0 / 15%);
     }
 
     .box-payment .card-header{

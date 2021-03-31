@@ -14,8 +14,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('layouts.frontend');
+    return view('layouts.category');
 });
+
+// Route::get('/', function () {
+//     return view('layouts.frontend');
+// });
 
 Auth::routes();
 

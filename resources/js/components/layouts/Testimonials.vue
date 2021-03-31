@@ -258,6 +258,17 @@
     margin-bottom: 0;
     color: #9a9999;
 }
+
+@media (max-width: 576px) {
+    /* .owl-item {
+        width: 490px !important;
+    }
+    .active {
+        width: 490px !important;
+    } */
+
+ }
+
 </style>
 
 <script>

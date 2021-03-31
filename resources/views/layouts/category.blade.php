@@ -13,13 +13,9 @@
     <body>
         <div id="app">
             <Navbar></Navbar>
-            <Slider></Slider>
-            <slider-products></slider-products>
-            <slider-products></slider-products>
-            <slider-products></slider-products>
-            <slider-products></slider-products>
-            <slider-products></slider-products>
-            <feature-payment></feature-payment>
+
+            <Category></Category>
+
             <Testimonials></Testimonials>
             <app-footer></app-footer>
         </div>

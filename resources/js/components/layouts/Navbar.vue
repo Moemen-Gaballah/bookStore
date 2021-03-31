@@ -1,7 +1,8 @@
 <template>
     <div class="main-navbar">
-        <div class="container">
-            <nav class="navbar navbar-expand-lg">
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container">
+
                 <a class="navbar-brand" href="#">bookStore</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"><i class="fa fa-sliders-h"></i></span>
@@ -43,7 +44,8 @@
                     </div>
                   </div>
 
-            </nav>
+          </div>
+        </nav>
             <!-- <div class="login ml-0">
                 <ul class="list-inline icons">
                     <li class="list-inline-item mr-1"><a class="nav-link"><i class="fa fa-globe-africa"></i></a></li>
@@ -53,7 +55,6 @@
                 </ul>
             </div> -->
 
-        </div>
     </div>
 </template>
 
@@ -65,6 +66,9 @@
         font-size: 18px;
         margin: 0 auto;
 
+    }
+    .main-navbar .navbar{
+        background-color: #00A99D;
     }
 
     .navbar-brand {

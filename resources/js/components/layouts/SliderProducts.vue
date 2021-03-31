@@ -294,6 +294,18 @@ div {
 .bbb_viewed_item.is_new .item_new {
     display: inline-block
 }
+
+@media (max-width: 768px) {
+    .owl-carousel.owl-drag .owl-item {
+        width: 100% !important;
+    }
+
+    .bbb_viewed {
+        padding-bottom: 0;
+    }
+
+ }
+
 </style>
 
 
