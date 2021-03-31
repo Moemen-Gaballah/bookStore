@@ -29,7 +29,9 @@ Vue.component('SliderProducts', require('./components/layouts/SliderProducts.vue
 Vue.component('FeaturePayment', require('./components/layouts/FeaturePayment.vue').default);
 Vue.component('Testimonials', require('./components/layouts/Testimonials.vue').default);
 Vue.component('AppFooter', require('./components/layouts/AppFooter.vue').default);
+// pages
 Vue.component('Category', require('./components/pages/frontend/Category.vue').default);
+Vue.component('Cart', require('./components/pages/frontend/Cart.vue').default);
 
 
 

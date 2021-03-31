@@ -11,8 +11,50 @@
                 روايات
             </p>
             <div class="books">
-                <span> </span>
-                <span> </span>
+                <div class="bar">
+                    <span>
+                        روايات
+                    </span>
+                    <span class="btn btn-secondary dropdown-toggle" type="button" id="dropdownSortButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        ترتيب
+                        <i class="fas fa-bars"></i>
+                    </span>
+                    <div class="dropdown-menu text-right dropdownSort" aria-labelledby="dropdownSortButton">
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="sort" checked id="default" value="default">
+                          <label class="form-check-label" for="default">
+                            مقترحاتنا
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="sort" id="bestSeller" value="bestSeller">
+                          <label class="form-check-label" for="bestSeller">
+                            الاكثر مبيعا
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="sort" id="highRate" value="highRate">
+                          <label class="form-check-label" for="highRate">
+                              الاعلى تقيما
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="sort" id="maxPrice" value="maxPrice">
+                          <label class="form-check-label" for="maxPrice">
+                              السعر من الاعلى الى الاقل
+                          </label>
+                        </div>
+
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="sort" id="minPrice" value="minPrice">
+                          <label class="form-check-label" for="minPrice">
+                              السعر من الاقل الى الاعلى
+                          </label>
+                        </div>
+
+                    </div>
+
+                </div>
                 <div class="row">
 
                     <div class="col-sm-6 col-md-4 col-lg-3 mb-5">
@@ -36,6 +78,7 @@
                           </div>
                     </div>
 
+
                     <div class="col-sm-6 col-md-4 col-lg-3 mb-5">
                         <div class="card">
                             <a href="/book" target="_blank">
@@ -56,7 +99,6 @@
                             </a>
                           </div>
                     </div>
-
 
                     <div class="col-sm-6 col-md-4 col-lg-3 mb-5 mb-5">
                         <div class="card">
@@ -79,7 +121,26 @@
                           </div>
                     </div>
 
-
+                    <div class="col-sm-6 col-md-4 col-lg-3 mb-5">
+                        <div class="card">
+                            <a href="/book" target="_blank">
+                                <img src="img/book/3.jpg" class="card-img-top" alt="...">
+                              <div class="card-body">
+                                    <h5 class="card-title">
+                                        عدنا كما لم نكن
+                                    </h5>
+                                    <p class="card-text">
+                                        عائشة ناصر
+                                    </p>
+                                </div>
+                            </a>
+                            <p class="price">
+                                20.00 ج.م
+                            </p>
+                            <a href="/cart" target="_blank"><i class="fas fa-shopping-cart fa-2x"></i>
+                            </a>
+                          </div>
+                    </div>
 
                     <div class="col-sm-6 col-md-4 col-lg-3 mb-5">
                         <div class="card">
@@ -102,6 +163,26 @@
                           </div>
                     </div>
 
+                    <div class="col-sm-6 col-md-4 col-lg-3 mb-5">
+                        <div class="card">
+                            <a href="/book" target="_blank">
+                                <img src="img/book/3.jpg" class="card-img-top" alt="...">
+                              <div class="card-body">
+                                    <h5 class="card-title">
+                                        عدنا كما لم نكن
+                                    </h5>
+                                    <p class="card-text">
+                                        عائشة ناصر
+                                    </p>
+                                </div>
+                            </a>
+                            <p class="price">
+                                20.00 ج.م
+                            </p>
+                            <a href="/cart" target="_blank"><i class="fas fa-shopping-cart fa-2x"></i>
+                            </a>
+                          </div>
+                    </div>
 
                     <div class="col-sm-6 col-md-4 col-lg-3 mb-5">
                         <div class="card">
@@ -124,7 +205,6 @@
                           </div>
                     </div>
 
-
                     <div class="col-sm-6 col-md-4 col-lg-3 mb-5">
                         <div class="card">
                             <a href="/book" target="_blank">
@@ -145,51 +225,6 @@
                             </a>
                           </div>
                     </div>
-
-
-                    <div class="col-sm-6 col-md-4 col-lg-3 mb-5">
-                        <div class="card">
-                            <a href="/book" target="_blank">
-                                <img src="img/book/3.jpg" class="card-img-top" alt="...">
-                              <div class="card-body">
-                                    <h5 class="card-title">
-                                        عدنا كما لم نكن
-                                    </h5>
-                                    <p class="card-text">
-                                        عائشة ناصر
-                                    </p>
-                                </div>
-                            </a>
-                            <p class="price">
-                                20.00 ج.م
-                            </p>
-                            <a href="/cart" target="_blank"><i class="fas fa-shopping-cart fa-2x"></i>
-                            </a>
-                          </div>
-                    </div>
-
-
-                    <div class="col-sm-6 col-md-4 col-lg-3 mb-5">
-                        <div class="card">
-                            <a href="/book" target="_blank">
-                                <img src="img/book/3.jpg" class="card-img-top" alt="...">
-                              <div class="card-body">
-                                    <h5 class="card-title">
-                                        عدنا كما لم نكن
-                                    </h5>
-                                    <p class="card-text">
-                                        عائشة ناصر
-                                    </p>
-                                </div>
-                            </a>
-                            <p class="price">
-                                20.00 ج.م
-                            </p>
-                            <a href="/cart" target="_blank"><i class="fas fa-shopping-cart fa-2x"></i>
-                            </a>
-                          </div>
-                    </div>
-
 
                     <div class="col-sm-6 col-md-4 col-lg-3 mb-5">
                         <div class="card">
@@ -243,8 +278,87 @@
         width: 100%;
         margin: 30px 2px 5px;
         overflow: hidden;
-        box-shadow: 0 1px 10px rgba(0,0,0,0.3)
+        border-radius: 5px;
+        box-shadow: 0 0 8px rgba(0,0,0,0.3)
+
     }
+
+
+    .category .books .bar{
+        margin: 20px 0 10px;
+    }
+
+        .category .books .bar span {
+            background-color: #00897D;
+            padding: 10px;
+            font-size: 22px;
+            margin: 10px -15px;
+            border: 1px solid #00897D;
+            border-radius: 10px 0 0 10px;
+            color: #FFF;
+            font-weight: bold;
+        }
+
+    .category .books .bar span:last-of-type{
+        float: left;
+        direction: ltr;
+        font-size: 15px;
+        color: #e2e2e2;
+        border: 1px solid #00897D;
+        border-radius: 50%;
+        margin: -8px 0px;
+    }
+
+.category .books .bar .dropdownSort {
+    padding: 10px;
+}
+
+.category .books .bar label{
+    margin-right: 22px;
+    font-weight: 600;
+    color: #7b7b7be6;
+    cursor: pointer;
+    width: 100%;
+
+}
+
+/*
+*   change color for check box
+*/
+
+input[type='radio']:after {
+        width: 16px;
+        height: 16px;
+        border-radius: 15px;
+        top: -2px;
+        /* left: -1px; */
+        padding: 1px;
+        position: relative;
+        background-color: #ffffff;
+        content: '';
+        display: inline-block;
+        visibility: visible;
+        border: 1px solid #afafaf;
+        cursor: pointer;
+    }
+
+    input[type='radio']:checked:after {
+        width: 16px;
+        height: 16px;
+        border-radius: 15px;
+        top: -2px;
+        /* left: -1px; */
+        padding: 1px;
+        position: relative;
+        background-color: #00A99D;
+        content: '';
+        display: inline-block;
+        visibility: visible;
+        border: 1px solid #afafaf;
+        cursor: pointer;
+    }
+
+    /* End style color checkbox */
 
 
     .category .books .row a{
