@@ -24,6 +24,11 @@ Route::get('/', function () {
 //     return view('layouts.frontend');
 // });
 
+
+Route::get('/dashboard', function () {
+    return view('layouts.dashboard');
+});
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -41,3 +41,14 @@ npm install admin-lte@v3.0.0-alpha.2 --save
 
 // install fontawesome
 npm install --save @fortawesome/fontawesome-free
+
+
+// package and libraries used
+    // 1- image intervention
+    http://image.intervention.io/
+
+    // 2- vue progress bar
+    https://github.com/hilongjw/vue-progressbar
+
+    //3- sweetalert2
+    https://sweetalert2.github.io/#download

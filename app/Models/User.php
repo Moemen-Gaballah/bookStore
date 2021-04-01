@@ -20,6 +20,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'profileImg',
+        'role'
     ];
 
     /**
@@ -40,4 +42,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // Accessors & Mutators
+    // accessor
+    public function getCreatedAtAttribute($date)
+    {
+        return \Carbon\Carbon::parse($date)->diffForHumans();
+    }
+
 }
