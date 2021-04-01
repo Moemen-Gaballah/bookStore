@@ -4,10 +4,10 @@
           <div class="col-12">
             <div class="card mt-5">
               <div class="card-header">
-                <h3 class="card-title">Users</h3>
-                <button @click="addUser" class="btn btn-primary ml-4" style="float:right">
+                <h3 class="card-title">Categories</h3>
+                <button @click="addCategory" class="btn btn-primary ml-4" style="float:right">
                     <i class="fas fa-users"></i>
-                    Add New User</button>
+                    Add New Category</button>
                 <div class="card-tools d-inline-block" style="margin-top: 8px;">
                   <div class="input-group input-group-sm" style="width: 150px;">
                     <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
@@ -26,25 +26,23 @@
                   <thead>
                     <tr>
                       <th>ID</th>
-                      <th>User</th>
-                      <th>email</th>
-                      <th>role</th>
+                      <th>title</th>
+                      <th>status</th>
                       <th>Created_at</th>
                       <th>action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="user in users">
-                      <td>{{ user.id }}</td>
-                      <td>{{ user.name }}</td>
-                      <td>{{ user.email }}</td>
-                      <td>{{ user.role | upperCase}}</td>
+                    <tr v-for="category in categories">
+                      <td>{{ category.id }}</td>
+                      <td>{{ category.title }}</td>
+                      <td>{{ category.status }}</td>
                       <td>{{ user.created_at }}</td>
                       <td>
                            <a href="#">
-                               <i class="fa fa-edit blue" @click="editUser(user)"></i>
+                               <i class="fa fa-edit blue" @click="editCategory(category)"></i>
                            </a> /
-                           <a href="#" @click="deleteUser(user.id)">
+                           <a href="#" @click="deleteCategory(category.id)">
                                <i class="fa fa-trash red"></i>
                            </a>
                        </td>
@@ -60,58 +58,38 @@
                   <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title" v-if="addNewUser" id="addNewTitle">Add New User</h5>
-                        <h5 class="modal-title" v-else id="addNewenterTitle">Edit User</h5>
+                        <h5 class="modal-title" v-if="addNewCategory" id="addNewTitle">Add New Category</h5>
+                        <h5 class="modal-title" v-else id="addNewenterTitle">Edit Category</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
                       <div class="modal-body">
                           <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" v-model="dataEditUser.name" @keydown="errors.clear('name')" class="form-control" :class="errors.has('name') ? 'border border-danger' : ''" id="username" aria-describedby="emailHelp" placeholder="Enter username">
-                            <span class="help text-danger" v-if="errors.has('name')" v-text="errors.get('name')"></span>
+                            <label for="title">Title</label>
+                            <input type="text" v-model="dataEditUser.name" @keydown="errors.clear('title')" class="form-control" :class="errors.has('title') ? 'border border-danger' : ''" id="title" aria-describedby="emailHelp" placeholder="Enter title">
+                            <span class="help text-danger" v-if="errors.has('title')" v-text="errors.get('title')"></span>
                           </div>
 
                           <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" class="form-control" @keydown="errors.clear('email')" :class="errors.has('email') ? 'border border-danger' : ''" v-model="dataEditUser.email" id="email" aria-describedby="emailHelp" placeholder="Enter email">
-                            <span class="help text-danger" v-if="errors.has('email')" v-text="errors.get('email')"></span>
-                          </div>
-
-                          <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" v-model="dataEditUser.password" @keydown="errors.clear('password')" class="form-control" :class="errors.has('password') ? 'border border-danger' : ''"  id="password" aria-describedby="emailHelp" placeholder="Enter password">
-                            <span class="help text-danger" v-if="errors.has('password')" v-text="errors.get('password')"></span>
-                          </div>
-
-                          <div class="form-group">
-                              <label for="role">Role</label>
-                              <select v-model="dataEditUser.role" name="role" class="form-control" id="role">
-                                <option value="user">User</option>
-                                <option value="admin">Admin</option>
+                              <label for="status">Stauts</label>
+                              <select v-model="dataEditUser.status" name="status" class="form-control" id="status">
+                                <option value="1">Active</option>
+                                <option value="0">In Active</option>
                               </select>
                             </div>
 
-                            <div class="form-group">
-                              <label for="profileImg">Upload profile img</label>
-                              <input type="file" @change="changeProfileImg" class="form-control-file" id="profileImg">
-                            </div>
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" @click="storeNewUser"  v-if="addNewUser" class="btn btn-primary">Add User</button>
-                        <button type="button" @click="updateUser" v-else class="btn btn-primary">Update User</button>
+                        <button type="button" @click="storeNewCategory"  v-if="addNewCategory" class="btn btn-primary">Add Category</button>
+                        <button type="button" @click="updateCategory" v-else class="btn btn-primary">Update Category</button>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 <!-- end another model -->
-
-
-
-
 
               </div>
               <!-- /.card-body -->
@@ -158,17 +136,17 @@ class Errors {
     export default {
         data() {
             return {
-                users: {},
-                addNewUser: true,
+                categories: {},
+                addNewCategory: true,
                 errors: new Errors(),
-                dataEditUser: {}
+                dataEditCategory: {}
             }
         },
         methods: {
-            getUsers() {
+            getCategories() {
                 this.$Progress.start()
                 // this.$Progress.fail()
-                axios.get('/api/user')
+                axios.get('/api/category')
                   .then((response) => {
                     // handle success
                     this.$Progress.finish()
@@ -179,52 +157,38 @@ class Errors {
                     this.$Progress.fail()
                   })
             },
-            addUser(){
-                this.addNewUser = true;
-                this.dataEditUser = {};
-                let role = 'use'
-                this.dataEditUser.role = 'user';
+            addCategory(){
+                this.addNewCategory = true;
+                this.dataEditCategory = {};
+                // let status = '1'
+                // this.dataEditUser.status = '1';
                 $('#addNew').modal('show');
             },
-            storeNewUser() {
+            storeNewCategory() {
 
                 axios({
                   method: 'post',
-                  url: '/api/user/',
-                  data: this.dataEditUser,
+                  url: '/api/category/',
+                  data: this.dataEditCategory,
                 }).then((response) => {
                   this.$Progress.finish()
                   $('#addNew').modal('hide');
                   Toast.fire({
                    icon: 'success',
-                   title: 'User has been Added.'
+                   title: 'Category has been Added.'
                  })
 
-                  this.dataEditUser = '';
-                  this.getUsers()
+                  this.dataEditCategory = '';
+                  this.getCategories()
               }).catch((error) => {
                   this.errors.record(error.response.data.errors)
                     this.$Progress.fail()
                 });
             },
-            editUser(user) {
-                this.addNewUser = false;
-                this.dataEditUser = user;
+            editCategory(category) {
+                this.addNewCategory = false;
+                this.dataEditCategory = category;
                 $('#addNew').modal('show');
-            },
-            changeProfileImg(event) {
-                console.log(event)
-                var input = event.target;
-               if (input.files && input.files[0]) {
-                   var reader = new FileReader();
-                   reader.onload = (e) => {
-                       this.dataEditUser.profileImg = e.target.result;
-                   }
-                   reader.readAsDataURL(input.files[0]);
-               }
-
-                // this.dataEditUser = user;
-                // $('#addNew').modal('show');
             },
 
             updateUser() {
@@ -232,17 +196,17 @@ class Errors {
 
                 axios({
                   method: 'put',
-                  url: '/api/user/'+this.dataEditUser.id,
-                  data: this.dataEditUser,
+                  url: '/api/category/'+this.dataEditCategory.id,
+                  data: this.dataEditCategory,
                 }).then((response) => {
                     $('#addNew').modal('hide');
                     this.$Progress.finish();
                      Toast.fire({
                       icon: 'success',
-                      title: 'User has been Updated.'
+                      title: 'Category has been Updated.'
                     })
 
-                  this.dataEditUser = '';
+                  this.dataEditCategory = '';
               }).catch((error) => {
                   this.errors.record(error.response.data.errors)
                   this.$Progress.fail();
@@ -264,45 +228,30 @@ class Errors {
                   if (result.isConfirmed) {
                       axios({
                         method: 'delete',
-                        url: '/api/user/'+id,
+                        url: '/api/category/'+id,
                       }).then((response) => {
                         this.$Progress.finish()
                         Toast.fire({
                          icon: 'success',
-                         title: 'User has been Deleted.'
+                         title: 'Category has been Deleted.'
                        })
 
-                        this.getUsers()
+                        this.getCategories()
                       }).catch((error) => {
                           this.$Progress.fail()
                            Toast.fire({
                             icon: 'error',
-                            title: 'Faild delete user'
+                            title: 'Faild delete category'
                           })
                       });
 
 
                   }
                 })
-
-
-                // axios({
-                //   method: 'delete',
-                //   url: '/api/user/'+id,
-                // }).then((response) => {
-                //   this.$Progress.finish()
-                //   this.getUsers()
-                // }).catch((error) => {
-                //     this.$Progress.fail()
-                // });
-
             }
         },
         created () {
-            this.getUsers()
-        },
-        mounted() {
-            console.log('Component mounted.')
+            this.getCategories()
         }
     }
 </script>

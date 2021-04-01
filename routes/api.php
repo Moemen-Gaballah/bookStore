@@ -20,3 +20,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::apiResources(['/user' => UserController::class]);
+Route::apiResources(['/category' => CategoryController::class]);
