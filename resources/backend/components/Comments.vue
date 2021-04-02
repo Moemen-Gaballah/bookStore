@@ -30,7 +30,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="comment in comments">
+                    <tr v-for="comment in comments.data">
                       <td>{{ comment.id }}</td>
                       <td>{{ comment.user.name }}</td>
                       <td>{{ comment.body }}</td>
@@ -89,6 +89,15 @@
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
+
+            <!-- Start Pagination -->
+            <!-- <pagination :data="comments" @pagination-change-page="getComments">
+            	<span slot="prev-nav">&lt; Previous</span>
+            	<span slot="next-nav">Next &gt;</span>
+            </pagination> -->
+            <pagination :data="comments" align="center" @pagination-change-page="getComments"></pagination>
+            <!-- End Pagination -->
+
           </div>
         </div>
     </div>
@@ -136,10 +145,10 @@ class Errors {
             }
         },
         methods: {
-            getComments() {
+            getComments(page = 1) {
                 this.$Progress.start()
                 // this.$Progress.fail()
-                axios.get('/api/comment')
+                axios.get('/api/comment?page=' + page)
                   .then((response) => {
                     // handle success
                     this.$Progress.finish()

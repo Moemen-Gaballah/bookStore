@@ -24,5 +24,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::apiResources(['/user' => UserController::class]);
 Route::apiResources(['/category' => CategoryController::class]);
+Route::get('allcategory', [CategoryController::class, 'getAll']);
 Route::apiResources(['/book' => BookController::class]);
+Route::post('/book/{id}', [BookController::class, 'update']);
 Route::apiResources(['/comment' => CommentController::class]);

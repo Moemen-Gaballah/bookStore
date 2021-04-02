@@ -15,7 +15,7 @@ class CommentController extends Controller
      */
     public function index()
     {
-        $comments = Comment::with('user')->get();
+        $comments = Comment::with('user')->paginate(10);
 
         return response()->json(['data' => $comments, 'message' => 200]);
     }

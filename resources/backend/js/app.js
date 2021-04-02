@@ -7,9 +7,6 @@
 
 require('./bootstrap');
 
-
-
-
 window.Vue = require('vue').default;
 import VueProgressBar from 'vue-progressbar'
 Vue.use(VueProgressBar, {
@@ -21,7 +18,6 @@ Vue.use(VueProgressBar, {
 // ES6 Modules or TypeScript
 import Swal from 'sweetalert2'
 window.Swal = Swal;
-
 
 const Toast = Swal.mixin({
   toast: true,
@@ -37,9 +33,12 @@ const Toast = Swal.mixin({
 
 window.Toast = Toast;
 
-
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
+
+Vue.component('pagination', require('laravel-vue-pagination'));
+
+
 
 
 let routes = [
@@ -71,7 +70,6 @@ const router = new VueRouter({
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('example-component', require('../components/ExampleComponent.vue').default);
-Vue.component('Users', require('../components/Users.vue').default);
 
 
 

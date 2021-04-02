@@ -34,7 +34,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="user in users">
+                    <tr v-for="user in users.data">
                       <td>{{ user.id }}</td>
                       <td>{{ user.name }}</td>
                       <td>{{ user.email }}</td>
@@ -51,7 +51,8 @@
                     </tr>
                   </tbody>
                 </table>
-                <!-- another model -->
+
+
 
 
 
@@ -109,13 +110,18 @@
 
                 <!-- end another model -->
 
-
-
-
-
               </div>
+
               <!-- /.card-body -->
             </div>
+
+                  <!-- Start Pagination -->
+
+                  <pagination :data="users" align="center" @pagination-change-page="getUsers"></pagination>
+
+                  <!-- End Pagination -->
+
+
             <!-- /.card -->
           </div>
         </div>
@@ -165,10 +171,10 @@ class Errors {
             }
         },
         methods: {
-            getUsers() {
+            getUsers(page=1) {
                 this.$Progress.start()
                 // this.$Progress.fail()
-                axios.get('/api/user')
+                axios.get('/api/user?page=' + page)
                   .then((response) => {
                     // handle success
                     this.$Progress.finish()

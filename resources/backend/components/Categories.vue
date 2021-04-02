@@ -33,7 +33,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="category in categories">
+                    <tr v-for="category in categories.data">
                       <td>{{ category.id }}</td>
                       <td>{{ category.title }}</td>
                       <td>{{ category.status == 1 ? 'Active' : 'In active' }}</td>
@@ -93,7 +93,15 @@
 
               </div>
               <!-- /.card-body -->
+
             </div>
+            <!-- Start Pagination -->
+
+            <pagination :data="categories" align="center" @pagination-change-page="getCategories"></pagination>
+
+            <!-- End Pagination -->
+
+
             <!-- /.card -->
           </div>
         </div>
@@ -143,10 +151,10 @@ class Errors {
             }
         },
         methods: {
-            getCategories() {
+            getCategories(page=1) {
                 this.$Progress.start()
                 // this.$Progress.fail()
-                axios.get('/api/category')
+                axios.get('/api/category?page=' + page)
                   .then((response) => {
                     // handle success
                     this.$Progress.finish()

@@ -15,7 +15,8 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = Book::with('category')->get();
+        // $books = Book::with('category')->get();
+        $books = Book::with('category')->paginate('10');
         return response()->json(['data' => $books, 'message' => 200]);
     }
 
@@ -45,7 +46,21 @@ class BookController extends Controller
             'description' => 'required|string|min:3|max:1000',
             'category_id' => 'required|integer',
             'price' => 'required|regex:/^\d{1,13}(\.\d{1,4})?$/',
+             'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
+
+        if($request->image){
+            $filename = time() .'.'. $request->image->getClientOriginalExtension();
+            \Image::make($request->image)
+            ->resize(300, null, function ($constraint){
+                $constraint->aspectRatio();
+            })
+
+            ->save(public_path('img/book/' . $filename));
+
+            $request['image'] = $filename;
+
+        }// end of if request->image
 
         return Book::create($request->all());
     }
@@ -89,8 +104,32 @@ class BookController extends Controller
             'stock' => 'required|integer|numeric|min:1|max:1000',
             'description' => 'required|string|min:3|max:1000',
             'category_id' => 'required|integer',
+            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'price' => 'required|regex:/^\d{1,13}(\.\d{1,4})?$/',
         ]);
+
+        $currentPhoto = $book->image;
+        if($request->image && !empty($request->image)){
+            $filename = time() .'.'. $request->image->getClientOriginalExtension();
+            \Image::make($request->image)
+            ->resize(300, null, function ($constraint){
+                $constraint->aspectRatio();
+            })
+
+            ->save(public_path('img/book/' . $filename));
+
+            $request = new Request($request->all());
+            $request->merge([ 'image' => $filename ]);
+
+            if($currentPhoto){
+                $oldUserPhoto = public_path('img/book/').$currentPhoto;
+                if(file_exists($oldUserPhoto)){
+                    unlink($oldUserPhoto);
+                }
+            }
+
+        }// end of if request->image
+
 
         $book->update($request->all());
         return ['message' => 'Done Update Book'];

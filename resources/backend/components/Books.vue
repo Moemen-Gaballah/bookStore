@@ -36,7 +36,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="book in books">
+                    <tr v-for="book in books.data">
                       <td>{{ book.id }}</td>
                       <td>{{ book.title }}</td>
                       <td>{{ book.category.title }}</td>
@@ -100,17 +100,18 @@
                           <div class="form-group">
                             <label for="description">Description</label>
                             <!-- <input type="integer" v-model="dataEditBook.description" @keydown="errors.clear('description')" class="form-control" :class="errors.has('description') ? 'border border-danger' : ''" id="description" aria-describedby="emailHelp" placeholder="Enter description"> -->
-                            <textarea v-model="dataEditBook.description" @keydown="errors.clear('description')" class="form-control" :class="errors.has('description') ? 'border border-danger' : ''" id="description" rows="3"></textarea>
+                            <textarea v-model="dataEditBook.description" @keydown="errors.clear('description')" class="form-control" :class="errors.has('description') ? 'border border-danger' : ''" id="description" rows="3">{{ dataEditBook.description }}</textarea>
                             <span class="help text-danger" v-if="errors.has('description')" v-text="errors.get('description')"></span>
                           </div>
 
                           <div class="form-group">
                               <label for="category">Category</label>
-                              <select v-model="dataEditBook.category_id" name="category_id" class="form-control" id="category">
+                              <select :class="errors.has('category_id') ? 'border border-danger' : ''" v-model="dataEditBook.category_id" name="category_id" class="form-control" id="category">
                                 <option value="" selected>choose Category</option>
                                 <option v-for="category in categories" :value="category.id">{{ category.title }}</option>
                                 <!-- <option value="0">In Active</option> -->
                               </select>
+                              <span class="help text-danger" v-if="errors.has('category_id')" v-text="errors.get('category_id')"></span>
                             </div>
 
                           <div class="form-group">
@@ -120,6 +121,13 @@
                                 <option value="0">In Active</option>
                               </select>
                             </div>
+
+                            <div class="form-group">
+                              <label for="uploadImg">Upload img</label>
+                              <input type="file" id="uploadImg" ref="inputFileImg" @change="uploadImg" class="form-control-file">
+                                <span class="help text-danger" v-if="errors.has('image')" v-text="errors.get('image')"></span>
+                            </div>
+
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -134,7 +142,12 @@
 
               </div>
               <!-- /.card-body -->
-            </div>
+          </div>
+
+            <!-- Start Pagination -->
+            <pagination :data="books" align="center" @pagination-change-page="getBooks"></pagination>
+            <!-- End Pagination -->
+
             <!-- /.card -->
           </div>
         </div>
@@ -181,14 +194,23 @@ class Errors {
                 categories: {},
                 addNewBook: true,
                 errors: new Errors(),
-                dataEditBook: {}
+                dataEditBook: {},
+                selectedFile: ''
             }
         },
         methods: {
+            clearInput () {
+              	var input = this.$refs.inputFileImg;
+                input.type = 'text';
+                input.type = 'file';
+                input.value = '';
+              },
+            uploadImg(event) {
+                this.selectedFile = event.target.files[0];
+            },
             getCategories() {
                 this.$Progress.start()
-                // this.$Progress.fail()
-                axios.get('/api/category')
+                axios.get('/api/allcategory')
                   .then((response) => {
                     // handle success
                     this.$Progress.finish()
@@ -199,10 +221,9 @@ class Errors {
                     this.$Progress.fail()
                   })
             },
-            getBooks() {
+            getBooks(page = 1) {
                 this.$Progress.start()
-                // this.$Progress.fail()
-                axios.get('/api/book')
+                axios.get('/api/book?page=' + page)
                   .then((response) => {
                     // handle success
                     this.$Progress.finish()
@@ -223,10 +244,24 @@ class Errors {
             },
             storeNewBook() {
                 this.$Progress.start()
+                var formData = new FormData()
+                console.log(this.selectedFile.length);
+                if(this.selectedFile.name.length > 1){
+
+                    formData.append('image', this.selectedFile, this.selectedFile.name)
+                }else {
+                    Vue.delete(this.dataEditBook, 'image');
+                }
+
+                for ( var key in this.dataEditBook ) {
+                    formData.append(key, this.dataEditBook[key]);
+                }
+
                 axios({
-                  method: 'post',
+                  method: 'POST',
                   url: '/api/book/',
-                  data: this.dataEditBook,
+                  data: formData,
+                 headers: {'Content-Type': 'multipart/form-data'}
                 }).then((response) => {
                   this.$Progress.finish()
                   $('#addNew').modal('hide');
@@ -236,6 +271,8 @@ class Errors {
                  })
 
                   this.dataEditBook = '';
+                  this.selectedFile = '';
+                  this.clearInput();
                   this.getBooks()
               }).catch((error) => {
                   this.errors.record(error.response.data.errors)
@@ -244,7 +281,6 @@ class Errors {
             },
             editBook(book) {
                 this.addNewBook = false;
-                // this.dataEditBook = book;
                 this.dataEditBook = JSON.parse(JSON.stringify(book));
                 $('#addNew').modal('show');
             },
@@ -252,11 +288,24 @@ class Errors {
             updateBook() {
                 this.$Progress.start()
 
+                var formData = new FormData()
+                if(this.selectedFile.name.length > 1){
+                    formData.append('image', this.selectedFile, this.selectedFile.name)
+                }else {
+                    Vue.delete(this.dataEditBook, 'image');
+                }
+
+                for ( var key in this.dataEditBook ) {
+                    formData.append(key, this.dataEditBook[key]);
+                }
+
                 axios({
-                  method: 'put',
+                  method: 'post',
                   url: '/api/book/'+this.dataEditBook.id,
-                  data: this.dataEditBook,
+                  data: formData,
+                  headers: {'Content-Type': 'multipart/form-data'},
                 }).then((response) => {
+                    this.clearInput();
                     this.getBooks()
                     $('#addNew').modal('hide');
                     this.$Progress.finish();
@@ -304,8 +353,6 @@ class Errors {
                             title: 'Faild delete book'
                           })
                       });
-
-
                   }
                 })
             }

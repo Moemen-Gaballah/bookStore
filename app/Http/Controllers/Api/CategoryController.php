@@ -15,10 +15,17 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::paginate('10');
 
         return response()->json(['data' =>$categories, 'message' => 200]);
     }
+
+
+        public function getAll()
+        {
+            $categories = Category::all();
+            return response()->json(['data' => $categories, 'message' => 200]);
+        }
 
     /**
      * Show the form for creating a new resource.
