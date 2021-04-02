@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Comment;
 
-class CategoryContoller extends Controller
+class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,9 @@ class CategoryContoller extends Controller
      */
     public function index()
     {
-        //
+        $comments = Comment::with('user')->get();
+
+        return response()->json(['data' => $comments, 'message' => 200]);
     }
 
     /**
@@ -35,7 +38,14 @@ class CategoryContoller extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'user_id' => 'required|integer',
+            'book_id' => 'required|integer',
+            'body' => 'required|max:1000',
+            'status' => 'required|integer',
+        ]);
+
+        return User::create($request->all());
     }
 
     /**
@@ -69,7 +79,14 @@ class CategoryContoller extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $comment = Comment::findOrFail($id);
+        $this->validate($request,[
+            'body' => 'required|max:1000',
+            'status' => 'required|integer',
+        ]);
+
+        $comment->update($request->all());
+        return response()->json(['data' => 'done update comment', 'message' => 200]);
     }
 
     /**
@@ -80,6 +97,9 @@ class CategoryContoller extends Controller
      */
     public function destroy($id)
     {
-        //
+        $comment = Comment::findOrFail($id);
+        $comment->delete();
+
+        return response()->json(['data' => 'done delete comment', 'message' => 200]);
     }
 }

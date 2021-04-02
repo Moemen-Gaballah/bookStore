@@ -14,19 +14,19 @@ class CategorySeeder extends Seeder
     public function run()
     {
         $category = \App\Models\Category::create([
-            'name' => 'روايات'
+            'title' => 'روايات'
         ]);
         $category = \App\Models\Category::create([
-            'name' => 'تطوير ذات'
+            'title' => 'تطوير ذات'
         ]);
         $category = \App\Models\Category::create([
-            'name' => 'الشعر'
+            'title' => 'الشعر'
         ]);
         $category = \App\Models\Category::create([
-            'name' => 'قصص'
+            'title' => 'قصص'
         ]);
         $category = \App\Models\Category::create([
-            'name' => 'كتب مترجمة'
+            'title' => 'كتب مترجمة'
         ]);
     }
 }

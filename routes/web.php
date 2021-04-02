@@ -12,22 +12,26 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('layouts.cart');
-});
+//
+// Route::get('/', function () {
+//     return view('layouts.cart');
+// });
 // Route::get('/', function () {
 //     return view('layouts.category');
 // });
 
-// Route::get('/', function () {
-//     return view('layouts.frontend');
-// });
+Route::get('/', function () {
+    return view('layouts.frontend');
+});
 
 
 Route::get('/dashboard', function () {
     return view('layouts.dashboard');
 });
+
+Route::get('{path}', function () {
+    return view('layouts.dashboard');
+})->where( 'path', '([A-z\d\-/_.]+)?' );
 
 Auth::routes();
 

@@ -209,7 +209,10 @@ class Errors {
             },
             editUser(user) {
                 this.addNewUser = false;
-                this.dataEditUser = user;
+                // this.dataEditUser = user
+                this.dataEditUser = JSON.parse(JSON.stringify(user))
+                // this.dataEditUser = JSON.parse(JSON(user.stringify(user))
+                // console.log(JSON.parse(JSON.stringify(user)) );
                 $('#addNew').modal('show');
             },
             changeProfileImg(event) {
@@ -236,6 +239,7 @@ class Errors {
                   data: this.dataEditUser,
                 }).then((response) => {
                     $('#addNew').modal('hide');
+                    this.getUsers()
                     this.$Progress.finish();
                      Toast.fire({
                       icon: 'success',

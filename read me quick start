@@ -55,3 +55,6 @@ npm install --save @fortawesome/fontawesome-free
 
     // 4- vue router
     https://router.vuejs.org/
+
+    // 5 laravel vue pagination
+    https://github.com/gilbitron/laravel-vue-pagination

@@ -4,10 +4,7 @@
           <div class="col-12">
             <div class="card mt-5">
               <div class="card-header">
-                <h3 class="card-title">Categories</h3>
-                <button @click="addCategory" class="btn btn-primary ml-4" style="float:right">
-                    <i class="fas fa-list"></i>
-                    Add New Category</button>
+                <h3 class="card-title">Comments</h3>
                 <div class="card-tools d-inline-block" style="margin-top: 8px;">
                   <div class="input-group input-group-sm" style="width: 150px;">
                     <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
@@ -26,23 +23,23 @@
                   <thead>
                     <tr>
                       <th>ID</th>
-                      <th>title</th>
+                      <th>username</th>
+                      <th>comment</th>
                       <th>status</th>
-                      <th>Created_at</th>
                       <th>action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="category in categories">
-                      <td>{{ category.id }}</td>
-                      <td>{{ category.title }}</td>
-                      <td>{{ category.status == 1 ? 'Active' : 'In active' }}</td>
-                      <td>{{ category.created_at }}</td>
+                    <tr v-for="comment in comments">
+                      <td>{{ comment.id }}</td>
+                      <td>{{ comment.user.name }}</td>
+                      <td>{{ comment.body }}</td>
+                      <td>{{ comment.status == 1 ? 'Active' : 'In active' }}</td>
                       <td>
                            <a href="#">
-                               <i class="fa fa-edit blue" @click="editCategory(category)"></i>
+                               <i class="fa fa-edit blue" @click="editComment(comment)"></i>
                            </a> /
-                           <a href="#" @click="deleteCategory(category.id)">
+                           <a href="#" @click="deleteComment(comment.id)">
                                <i class="fa fa-trash red"></i>
                            </a>
                        </td>
@@ -58,32 +55,29 @@
                   <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title" v-if="addNewCategory" id="addNewTitle">Add New Category</h5>
-                        <h5 class="modal-title" v-else id="addNewenterTitle">Edit Category</h5>
+                        <h5 class="modal-title" id="addNewenterTitle">Edit Comment</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
                       <div class="modal-body">
                           <div class="form-group">
-                            <label for="title">Title</label>
-                            <input type="text" v-model="dataEditCategory.title" @keydown="errors.clear('title')" class="form-control" :class="errors.has('title') ? 'border border-danger' : ''" id="title" aria-describedby="emailHelp" placeholder="Enter title">
-                            <span class="help text-danger" v-if="errors.has('title')" v-text="errors.get('title')"></span>
+                            <label for="title">comment</label>
+                            <textarea v-model="dataEditComment.body" @keydown="errors.clear('body')" class="form-control" :class="errors.has('body') ? 'border border-danger' : ''" id="body" rows="3"></textarea>
+                            <span class="help text-danger" v-if="errors.has('body')" v-text="errors.get('body')"></span>
                           </div>
 
                           <div class="form-group">
                               <label for="status">Stauts</label>
-                              <select v-model="dataEditCategory.status" name="status" class="form-control" id="status">
+                              <select v-model="dataEditComment.status" name="status" class="form-control" id="status">
                                 <option value="1">Active</option>
                                 <option value="0">In Active</option>
                               </select>
                             </div>
-
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" @click="storeNewCategory"  v-if="addNewCategory" class="btn btn-primary">Add Category</button>
-                        <button type="button" @click="updateCategory" v-else class="btn btn-primary">Update Category</button>
+                        <button type="button" @click="updateComment" class="btn btn-primary">Update Comment</button>
                       </div>
                     </div>
                   </div>
@@ -136,90 +130,61 @@ class Errors {
     export default {
         data() {
             return {
-                categories: {},
-                addNewCategory: true,
+                comments: {},
                 errors: new Errors(),
-                dataEditCategory: {}
+                dataEditComment: {}
             }
         },
         methods: {
-            getCategories() {
+            getComments() {
                 this.$Progress.start()
                 // this.$Progress.fail()
-                axios.get('/api/category')
+                axios.get('/api/comment')
                   .then((response) => {
                     // handle success
                     this.$Progress.finish()
-                    this.categories = response.data.data;
+                    this.comments = response.data.data;
                   })
                   .catch((error) => {
                     // handle error
                     this.$Progress.fail()
                   })
             },
-            addCategory(){
-                this.addNewCategory = true;
-                this.dataEditCategory = {};
-                let status = '1'
-                this.dataEditCategory.status = '1';
-                $('#addNew').modal('show');
-            },
-            storeNewCategory() {
-                this.$Progress.start()
-                axios({
-                  method: 'post',
-                  url: '/api/category/',
-                  data: this.dataEditCategory,
-                }).then((response) => {
-                  this.$Progress.finish()
-                  $('#addNew').modal('hide');
-                  Toast.fire({
-                   icon: 'success',
-                   title: 'Category has been Added.'
-                 })
-
-                  this.dataEditCategory = '';
-                  this.getCategories()
-              }).catch((error) => {
-                  this.errors.record(error.response.data.errors)
-                    this.$Progress.fail()
-                });
-            },
-            editCategory(category) {
-                this.addNewCategory = false;
-                // this.dataEditCategory = category;
-                this.dataEditCategory = JSON.parse(JSON.stringify(category));
+            editComment(comment) {
+                this.addNewComment = false;
+                this.dataEditComment = JSON.parse(JSON.stringify(comment));
                 $('#addNew').modal('show');
             },
 
-            updateCategory() {
+            updateComment() {
                 this.$Progress.start()
 
                 axios({
                   method: 'put',
-                  url: '/api/category/'+this.dataEditCategory.id,
-                  data: this.dataEditCategory,
+                  url: '/api/comment/'+this.dataEditComment.id,
+                  data: this.dataEditComment,
                 }).then((response) => {
+                    this.getComments()
                     $('#addNew').modal('hide');
                     this.$Progress.finish();
                      Toast.fire({
                       icon: 'success',
-                      title: 'Category has been Updated.'
+                      title: 'Comment has been Updated.'
                     })
 
-                  this.dataEditCategory = '';
+                  this.dataEditComments = '';
               }).catch((error) => {
                   this.errors.record(error.response.data.errors)
                   this.$Progress.fail();
                });
 
             },
-            deleteCategory(id) {
+            deleteComment(id) {
                  this.$Progress.start()
 
                  Swal.fire({
                   title: 'Are you sure?',
-                  text: "You won't delete category!",
+                  text: "You won't delete comment!",
                   icon: 'warning',
                   showCancelButton: true,
                   confirmButtonColor: '#3085d6',
@@ -230,29 +195,30 @@ class Errors {
                       this.$Progress.start()
                       axios({
                         method: 'delete',
-                        url: '/api/category/'+id,
+                        url: '/api/comment/'+id,
                       }).then((response) => {
                         this.$Progress.finish()
                         Toast.fire({
                          icon: 'success',
-                         title: 'Category has been Deleted.'
+                         title: 'comment has been Deleted.'
                        })
 
-                        this.getCategories()
+                        this.getComments()
                       }).catch((error) => {
                           this.$Progress.fail()
                            Toast.fire({
                             icon: 'error',
-                            title: 'Faild delete category'
+                            title: 'Faild delete comment'
                           })
                       });
+
 
                   }
                 })
             }
         },
         created () {
-            this.getCategories()
+            this.getComments()
         }
     }
 </script>

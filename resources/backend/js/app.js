@@ -37,6 +37,28 @@ const Toast = Swal.mixin({
 
 window.Toast = Toast;
 
+
+import VueRouter from 'vue-router'
+Vue.use(VueRouter)
+
+
+let routes = [
+  // { path: '/dashboard', component: require('./components/Dashboard.vue').default },
+  { path: '/users', component: require('../components/Users.vue').default },
+  { path: '/categories', component: require('../components/Categories.vue').default },
+  { path: '/books', component: require('../components/Books.vue').default },
+  { path: '/comments', component: require('../components/Comments.vue').default }
+  // ,
+  // { path: '/invoice', component: require('./components/Invoice.vue').default },
+  // { path: '*', component: require('./components/NotFound.vue').default }
+]
+
+
+const router = new VueRouter({
+    mode: 'history',
+    routes // short for `routes: routes`
+})
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -69,4 +91,5 @@ Vue.filter('upperCase', function(text) {
 
 const app = new Vue({
     el: '#app',
+     router,
 });

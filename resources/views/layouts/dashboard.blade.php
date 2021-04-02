@@ -72,7 +72,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </li>
 
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <router-link to="/users" class="nav-link">
               <i class="fas fa-users cyan"></i>
               <p>
                 Users
@@ -80,30 +80,30 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <router-link to="/categories" class="nav-link">
              <i class="fa fa-list green" aria-hidden="true"></i>
               <p>
                   Categories
               </p>
-            </a>
+            </router-link>
           </li>
 
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <router-link to="/books" class="nav-link">
               <i class="fas fa-book orange"></i>
               <p>
                   Books
               </p>
-            </a>
+            </router-link>
           </li>
 
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <router-link to="/comments" class="nav-link">
               <i class="fas fa-comments yellow"></i>
               <p>
                   Comments
               </p>
-            </a>
+            </router-link>
           </li>
 
           <li class="nav-item">
@@ -130,9 +130,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Main content -->
     <div class="content">
       <div class="container-fluid">
-          <!-- <router-view></router-view>-->
 
-          <users></users>
+          <router-view></router-view>
+          <!-- <users></users> -->
           <vue-progress-bar></vue-progress-bar>
 
         <!-- /.row -->

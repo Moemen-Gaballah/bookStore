@@ -3,6 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\BookController;
+use App\Http\Controllers\Api\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +24,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::apiResources(['/user' => UserController::class]);
 Route::apiResources(['/category' => CategoryController::class]);
+Route::apiResources(['/book' => BookController::class]);
+Route::apiResources(['/comment' => CommentController::class]);
