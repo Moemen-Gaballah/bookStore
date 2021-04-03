@@ -16,8 +16,27 @@ class BookController extends Controller
     public function index()
     {
         // $books = Book::with('category')->get();
-        $books = Book::with('category')->paginate('10');
+        $books = Book::with('category')->latest()->paginate('10');
         return response()->json(['data' => $books, 'message' => 200]);
+    }
+
+    public function search(){
+        if($search = \Request::get('q')){
+            $books = Book::with('category')->where(function($query) use ($search){
+                $query->where('title', 'LIKE', "%$search%")
+                ->orWhere('author', 'LIKE',"%$search%")
+                ->orWhereHas('category', function ($query) use ($search){
+                    $query->where('title','LIKE',"%$search%");
+                });
+
+            })->paginate(20);
+        }else{
+            // $users = User::latest()->paginate(5);
+            return  $this->index();
+            // dd($users);
+        }
+        // return $users;
+        return response()->json(['data' =>$books, 'message' => 200]);
     }
 
     /**

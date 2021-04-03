@@ -18,7 +18,24 @@ class UserController extends Controller
     public function index()
     {
         // $users = User::all();
-        $users = User::paginate('15');
+        $users = User::latest()->paginate('15');
+        return response()->json(['data' =>$users, 'message' => 200]);
+    }
+
+
+    public function search(){
+        if($search = \Request::get('q')){
+            $users = User::where(function($query) use ($search){
+                $query->where('name', 'LIKE', "%$search%")
+                ->orWhere('email', 'LIKE',"%$search%")
+                ->orWhere('role', 'LIKE',"%$search%");
+            })->paginate(20);
+        }else{
+            // $users = User::latest()->paginate(5);
+            return  $this->index();
+            // dd($users);
+        }
+        // return $users;
         return response()->json(['data' =>$users, 'message' => 200]);
     }
 

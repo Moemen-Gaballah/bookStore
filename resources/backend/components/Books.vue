@@ -10,9 +10,9 @@
                     Add New Book</button>
                 <div class="card-tools d-inline-block" style="margin-top: 8px;">
                   <div class="input-group input-group-sm" style="width: 150px;">
-                    <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                    <input type="text" @keyup="searchit" name="table_search" v-model="search" class="form-control float-right" placeholder="Search">
                     <div class="input-group-append">
-                      <button type="submit" class="btn btn-default">
+                      <button  @click="searchit" class="btn btn-default">
                         <i class="fas fa-search"></i>
                       </button>
                     </div>
@@ -36,11 +36,11 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="book in books.data">
-                      <td>{{ book.id }}</td>
+                    <tr v-for="(book, index) in books.data">
+                      <td>{{ index+1 }}</td>
                       <td>{{ book.title }}</td>
-                      <td>{{ book.category.title }}</td>
                       <td>{{ book.author }}</td>
+                      <td>{{ book.category.title }}</td>
                       <td>{{ book.price }}</td>
                       <td>{{ book.status == 1 ? 'Active' : 'In active' }}</td>
                       <td>{{ book.stock }}</td>
@@ -195,10 +195,20 @@ class Errors {
                 addNewBook: true,
                 errors: new Errors(),
                 dataEditBook: {},
-                selectedFile: ''
+                selectedFile: '',
+                search: '',
             }
         },
         methods: {
+            searchit () {
+                axios.get('api/bookSearch?q='+ this.search)
+                .then((data) => {
+                    this.books = data.data.data ;
+                })
+                .catch(() => {
+
+                })
+              },
             clearInput () {
               	var input = this.$refs.inputFileImg;
                 input.type = 'text';

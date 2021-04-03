@@ -10,9 +10,9 @@
                     Add New User</button>
                 <div class="card-tools d-inline-block" style="margin-top: 8px;">
                   <div class="input-group input-group-sm" style="width: 150px;">
-                    <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                    <input type="text" @keyup="searchit" v-model="search" name="table_search" class="form-control float-right" placeholder="Search">
                     <div class="input-group-append">
-                      <button type="submit" class="btn btn-default">
+                      <button @click="searchit" class="btn btn-default">
                         <i class="fas fa-search"></i>
                       </button>
                     </div>
@@ -34,8 +34,8 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="user in users.data">
-                      <td>{{ user.id }}</td>
+                    <tr v-for="(user, index) in users.data">
+                      <td>{{ index+1 }}</td>
                       <td>{{ user.name }}</td>
                       <td>{{ user.email }}</td>
                       <td>{{ user.role | upperCase}}</td>
@@ -167,10 +167,21 @@ class Errors {
                 users: {},
                 addNewUser: true,
                 errors: new Errors(),
-                dataEditUser: {}
+                dataEditUser: {},
+                search: '',
             }
         },
         methods: {
+            searchit () {
+                axios.get('api/userSearch?q='+ this.search)
+                .then((data) => {
+                    // console.log(data)
+                    this.users = data.data.data ;
+                })
+                .catch(() => {
+
+                })
+              },
             getUsers(page=1) {
                 this.$Progress.start()
                 // this.$Progress.fail()

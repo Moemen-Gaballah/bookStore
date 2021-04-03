@@ -2071,10 +2071,18 @@ var Errors = /*#__PURE__*/function () {
       addNewBook: true,
       errors: new Errors(),
       dataEditBook: {},
-      selectedFile: ''
+      selectedFile: '',
+      search: ''
     };
   },
   methods: {
+    searchit: function searchit() {
+      var _this = this;
+
+      axios.get('api/bookSearch?q=' + this.search).then(function (data) {
+        _this.books = data.data.data;
+      })["catch"](function () {});
+    },
     clearInput: function clearInput() {
       var input = this.$refs.inputFileImg;
       input.type = 'text';
@@ -2085,32 +2093,32 @@ var Errors = /*#__PURE__*/function () {
       this.selectedFile = event.target.files[0];
     },
     getCategories: function getCategories() {
-      var _this = this;
+      var _this2 = this;
 
       this.$Progress.start();
       axios.get('/api/allcategory').then(function (response) {
         // handle success
-        _this.$Progress.finish();
+        _this2.$Progress.finish();
 
-        _this.categories = response.data.data;
+        _this2.categories = response.data.data;
       })["catch"](function (error) {
         // handle error
-        _this.$Progress.fail();
+        _this2.$Progress.fail();
       });
     },
     getBooks: function getBooks() {
-      var _this2 = this;
+      var _this3 = this;
 
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       this.$Progress.start();
       axios.get('/api/book?page=' + page).then(function (response) {
         // handle success
-        _this2.$Progress.finish();
+        _this3.$Progress.finish();
 
-        _this2.books = response.data.data;
+        _this3.books = response.data.data;
       })["catch"](function (error) {
         // handle error
-        _this2.$Progress.fail();
+        _this3.$Progress.fail();
       });
     },
     addBook: function addBook() {
@@ -2122,7 +2130,7 @@ var Errors = /*#__PURE__*/function () {
       $('#addNew').modal('show');
     },
     storeNewBook: function storeNewBook() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.$Progress.start();
       var formData = new FormData();
@@ -2146,23 +2154,23 @@ var Errors = /*#__PURE__*/function () {
           'Content-Type': 'multipart/form-data'
         }
       }).then(function (response) {
-        _this3.$Progress.finish();
+        _this4.$Progress.finish();
 
         $('#addNew').modal('hide');
         Toast.fire({
           icon: 'success',
           title: 'Book has been Added.'
         });
-        _this3.dataEditBook = '';
-        _this3.selectedFile = '';
+        _this4.dataEditBook = '';
+        _this4.selectedFile = '';
 
-        _this3.clearInput();
+        _this4.clearInput();
 
-        _this3.getBooks();
+        _this4.getBooks();
       })["catch"](function (error) {
-        _this3.errors.record(error.response.data.errors);
+        _this4.errors.record(error.response.data.errors);
 
-        _this3.$Progress.fail();
+        _this4.$Progress.fail();
       });
     },
     editBook: function editBook(book) {
@@ -2171,7 +2179,7 @@ var Errors = /*#__PURE__*/function () {
       $('#addNew').modal('show');
     },
     updateBook: function updateBook() {
-      var _this4 = this;
+      var _this5 = this;
 
       this.$Progress.start();
       var formData = new FormData();
@@ -2194,27 +2202,27 @@ var Errors = /*#__PURE__*/function () {
           'Content-Type': 'multipart/form-data'
         }
       }).then(function (response) {
-        _this4.clearInput();
+        _this5.clearInput();
 
-        _this4.getBooks();
+        _this5.getBooks();
 
         $('#addNew').modal('hide');
 
-        _this4.$Progress.finish();
+        _this5.$Progress.finish();
 
         Toast.fire({
           icon: 'success',
           title: 'Book has been Updated.'
         });
-        _this4.dataEditBook = '';
+        _this5.dataEditBook = '';
       })["catch"](function (error) {
-        _this4.errors.record(error.response.data.errors);
+        _this5.errors.record(error.response.data.errors);
 
-        _this4.$Progress.fail();
+        _this5.$Progress.fail();
       });
     },
     deleteBook: function deleteBook(id) {
-      var _this5 = this;
+      var _this6 = this;
 
       this.$Progress.start();
       Swal.fire({
@@ -2227,22 +2235,22 @@ var Errors = /*#__PURE__*/function () {
         confirmButtonText: 'Yes, delete it!'
       }).then(function (result) {
         if (result.isConfirmed) {
-          _this5.$Progress.start();
+          _this6.$Progress.start();
 
           axios({
             method: 'delete',
             url: '/api/book/' + id
           }).then(function (response) {
-            _this5.$Progress.finish();
+            _this6.$Progress.finish();
 
             Toast.fire({
               icon: 'success',
               title: 'Book has been Deleted.'
             });
 
-            _this5.getBooks();
+            _this6.getBooks();
           })["catch"](function (error) {
-            _this5.$Progress.fail();
+            _this6.$Progress.fail();
 
             Toast.fire({
               icon: 'error',
@@ -3056,24 +3064,33 @@ var Errors = /*#__PURE__*/function () {
       users: {},
       addNewUser: true,
       errors: new Errors(),
-      dataEditUser: {}
+      dataEditUser: {},
+      search: ''
     };
   },
   methods: {
-    getUsers: function getUsers() {
+    searchit: function searchit() {
       var _this = this;
+
+      axios.get('api/userSearch?q=' + this.search).then(function (data) {
+        // console.log(data)
+        _this.users = data.data.data;
+      })["catch"](function () {});
+    },
+    getUsers: function getUsers() {
+      var _this2 = this;
 
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       this.$Progress.start(); // this.$Progress.fail()
 
       axios.get('/api/user?page=' + page).then(function (response) {
         // handle success
-        _this.$Progress.finish();
+        _this2.$Progress.finish();
 
-        _this.users = response.data.data;
+        _this2.users = response.data.data;
       })["catch"](function (error) {
         // handle error
-        _this.$Progress.fail();
+        _this2.$Progress.fail();
       });
     },
     addUser: function addUser() {
@@ -3084,27 +3101,27 @@ var Errors = /*#__PURE__*/function () {
       $('#addNew').modal('show');
     },
     storeNewUser: function storeNewUser() {
-      var _this2 = this;
+      var _this3 = this;
 
       axios({
         method: 'post',
         url: '/api/user/',
         data: this.dataEditUser
       }).then(function (response) {
-        _this2.$Progress.finish();
+        _this3.$Progress.finish();
 
         $('#addNew').modal('hide');
         Toast.fire({
           icon: 'success',
           title: 'User has been Added.'
         });
-        _this2.dataEditUser = '';
+        _this3.dataEditUser = '';
 
-        _this2.getUsers();
+        _this3.getUsers();
       })["catch"](function (error) {
-        _this2.errors.record(error.response.data.errors);
+        _this3.errors.record(error.response.data.errors);
 
-        _this2.$Progress.fail();
+        _this3.$Progress.fail();
       });
     },
     editUser: function editUser(user) {
@@ -3116,7 +3133,7 @@ var Errors = /*#__PURE__*/function () {
       $('#addNew').modal('show');
     },
     changeProfileImg: function changeProfileImg(event) {
-      var _this3 = this;
+      var _this4 = this;
 
       console.log(event);
       var input = event.target;
@@ -3125,7 +3142,7 @@ var Errors = /*#__PURE__*/function () {
         var reader = new FileReader();
 
         reader.onload = function (e) {
-          _this3.dataEditUser.profileImg = e.target.result;
+          _this4.dataEditUser.profileImg = e.target.result;
         };
 
         reader.readAsDataURL(input.files[0]);
@@ -3134,7 +3151,7 @@ var Errors = /*#__PURE__*/function () {
 
     },
     updateUser: function updateUser() {
-      var _this4 = this;
+      var _this5 = this;
 
       this.$Progress.start();
       axios({
@@ -3144,23 +3161,23 @@ var Errors = /*#__PURE__*/function () {
       }).then(function (response) {
         $('#addNew').modal('hide');
 
-        _this4.getUsers();
+        _this5.getUsers();
 
-        _this4.$Progress.finish();
+        _this5.$Progress.finish();
 
         Toast.fire({
           icon: 'success',
           title: 'User has been Updated.'
         });
-        _this4.dataEditUser = '';
+        _this5.dataEditUser = '';
       })["catch"](function (error) {
-        _this4.errors.record(error.response.data.errors);
+        _this5.errors.record(error.response.data.errors);
 
-        _this4.$Progress.fail();
+        _this5.$Progress.fail();
       });
     },
     deleteUser: function deleteUser(id) {
-      var _this5 = this;
+      var _this6 = this;
 
       this.$Progress.start();
       Swal.fire({
@@ -3177,16 +3194,16 @@ var Errors = /*#__PURE__*/function () {
             method: 'delete',
             url: '/api/user/' + id
           }).then(function (response) {
-            _this5.$Progress.finish();
+            _this6.$Progress.finish();
 
             Toast.fire({
               icon: 'success',
               title: 'User has been Deleted.'
             });
 
-            _this5.getUsers();
+            _this6.getUsers();
           })["catch"](function (error) {
-            _this5.$Progress.fail();
+            _this6.$Progress.fail();
 
             Toast.fire({
               icon: 'error',
@@ -43397,24 +43414,78 @@ var render = function() {
                 ]
               ),
               _vm._v(" "),
-              _vm._m(0)
+              _c(
+                "div",
+                {
+                  staticClass: "card-tools d-inline-block",
+                  staticStyle: { "margin-top": "8px" }
+                },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "input-group input-group-sm",
+                      staticStyle: { width: "150px" }
+                    },
+                    [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.search,
+                            expression: "search"
+                          }
+                        ],
+                        staticClass: "form-control float-right",
+                        attrs: {
+                          type: "text",
+                          name: "table_search",
+                          placeholder: "Search"
+                        },
+                        domProps: { value: _vm.search },
+                        on: {
+                          keyup: _vm.searchit,
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.search = $event.target.value
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "input-group-append" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-default",
+                            on: { click: _vm.searchit }
+                          },
+                          [_c("i", { staticClass: "fas fa-search" })]
+                        )
+                      ])
+                    ]
+                  )
+                ]
+              )
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "card-body table-responsive p-0" }, [
               _c("table", { staticClass: "table table-hover text-nowrap" }, [
-                _vm._m(1),
+                _vm._m(0),
                 _vm._v(" "),
                 _c(
                   "tbody",
-                  _vm._l(_vm.books.data, function(book) {
+                  _vm._l(_vm.books.data, function(book, index) {
                     return _c("tr", [
-                      _c("td", [_vm._v(_vm._s(book.id))]),
+                      _c("td", [_vm._v(_vm._s(index + 1))]),
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(book.title))]),
                       _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(book.category.title))]),
-                      _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(book.author))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(book.category.title))]),
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(book.price))]),
                       _vm._v(" "),
@@ -43497,7 +43568,7 @@ var render = function() {
                                 [_vm._v("Edit book")]
                               ),
                           _vm._v(" "),
-                          _vm._m(2)
+                          _vm._m(1)
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "modal-body" }, [
@@ -43965,45 +44036,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "card-tools d-inline-block",
-        staticStyle: { "margin-top": "8px" }
-      },
-      [
-        _c(
-          "div",
-          {
-            staticClass: "input-group input-group-sm",
-            staticStyle: { width: "150px" }
-          },
-          [
-            _c("input", {
-              staticClass: "form-control float-right",
-              attrs: {
-                type: "text",
-                name: "table_search",
-                placeholder: "Search"
-              }
-            }),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group-append" }, [
-              _c(
-                "button",
-                { staticClass: "btn btn-default", attrs: { type: "submit" } },
-                [_c("i", { staticClass: "fas fa-search" })]
-              )
-            ])
-          ]
-        )
-      ]
-    )
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -44841,18 +44873,72 @@ var render = function() {
                 ]
               ),
               _vm._v(" "),
-              _vm._m(0)
+              _c(
+                "div",
+                {
+                  staticClass: "card-tools d-inline-block",
+                  staticStyle: { "margin-top": "8px" }
+                },
+                [
+                  _c(
+                    "div",
+                    {
+                      staticClass: "input-group input-group-sm",
+                      staticStyle: { width: "150px" }
+                    },
+                    [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.search,
+                            expression: "search"
+                          }
+                        ],
+                        staticClass: "form-control float-right",
+                        attrs: {
+                          type: "text",
+                          name: "table_search",
+                          placeholder: "Search"
+                        },
+                        domProps: { value: _vm.search },
+                        on: {
+                          keyup: _vm.searchit,
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.search = $event.target.value
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "input-group-append" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-default",
+                            on: { click: _vm.searchit }
+                          },
+                          [_c("i", { staticClass: "fas fa-search" })]
+                        )
+                      ])
+                    ]
+                  )
+                ]
+              )
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "card-body table-responsive p-0" }, [
               _c("table", { staticClass: "table table-hover text-nowrap" }, [
-                _vm._m(1),
+                _vm._m(0),
                 _vm._v(" "),
                 _c(
                   "tbody",
-                  _vm._l(_vm.users.data, function(user) {
+                  _vm._l(_vm.users.data, function(user, index) {
                     return _c("tr", [
-                      _c("td", [_vm._v(_vm._s(user.id))]),
+                      _c("td", [_vm._v(_vm._s(index + 1))]),
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(user.name))]),
                       _vm._v(" "),
@@ -44935,7 +45021,7 @@ var render = function() {
                                 [_vm._v("Edit User")]
                               ),
                           _vm._v(" "),
-                          _vm._m(2)
+                          _vm._m(1)
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "modal-body" }, [
@@ -45210,45 +45296,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "card-tools d-inline-block",
-        staticStyle: { "margin-top": "8px" }
-      },
-      [
-        _c(
-          "div",
-          {
-            staticClass: "input-group input-group-sm",
-            staticStyle: { width: "150px" }
-          },
-          [
-            _c("input", {
-              staticClass: "form-control float-right",
-              attrs: {
-                type: "text",
-                name: "table_search",
-                placeholder: "Search"
-              }
-            }),
-            _vm._v(" "),
-            _c("div", { staticClass: "input-group-append" }, [
-              _c(
-                "button",
-                { staticClass: "btn btn-default", attrs: { type: "submit" } },
-                [_c("i", { staticClass: "fas fa-search" })]
-              )
-            ])
-          ]
-        )
-      ]
-    )
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
