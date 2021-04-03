@@ -39,7 +39,7 @@
                             <li class="list-inline-item mr-1"><a class="nav-link"><i class="fa fa-globe-africa"></i></a></li>
                             <li class="list-inline-item mr-1"><a class="nav-link"><i class="fa fa-user"></i></a></li>
                             <li class="list-inline-item  mr-1"><a class="nav-link"><i class="fa fa-search"></i></a></li>
-                            <li class="list-inline-item mr-1"><a class="nav-link"><i class="fa fa-cart-plus"></i></a></li>
+                            <li class="list-inline-item mr-1"><a class="nav-link"><i class="fa fa-cart-plus"></i>{{countItemInCart}}</a></li>
                         </ul>
                     </div>
                   </div>
@@ -134,8 +134,30 @@
 
 <script>
     export default {
-        mounted() {
-            console.log('Component mounted.')
+        data() {
+            return {
+                countItemInCart:0
+            }
+        },
+        methods: {
+            countItemCart() {
+                var count = 0;
+                if(JSON.parse(localStorage.getItem("carts")) != null){
+                    JSON.parse(localStorage.getItem("carts")).forEach(item =>{
+                       if(item !=' ' &&  item!=null){
+                             count+=1;
+                          }
+                       })
+                }
+                this.countItemInCart = count;
+                console.log(count + 'nav');
+            }
+        },
+        created() {
+            this.countItemCart(),
+            Fire.$on('countItemInCart', () => {
+               this.countItemCart();
+           });
         }
     }
 </script>

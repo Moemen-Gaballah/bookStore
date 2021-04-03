@@ -13,13 +13,14 @@
     <body>
         <div id="app">
             <Navbar></Navbar>
-            <Slider></Slider>
+             <router-view></router-view>
+            <!-- <Slider></Slider>
             <slider-products></slider-products>
             <slider-products></slider-products>
             <slider-products></slider-products>
             <slider-products></slider-products>
             <slider-products></slider-products>
-            <feature-payment></feature-payment>
+            <feature-payment></feature-payment> -->
             <Testimonials></Testimonials>
             <app-footer></app-footer>
         </div>

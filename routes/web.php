@@ -24,12 +24,20 @@ Route::get('/', function () {
     return view('layouts.frontend');
 });
 
+// Route::get('/category', function () {
+//     return view('layouts.frontend');
+// });
 
-Route::get('/dashboard', function () {
-    return view('layouts.dashboard');
-});
 
-Route::get('{path}', function () {
+// Route::get('/dashboard', function () {
+//     return view('layouts.dashboard');
+// });
+
+Route::get('/{path}', function () {
+    return view('layouts.frontend');
+})->where( 'path', '([A-z\d\-/_.]+)?' );
+
+Route::get('/dashboard/{path}', function () {
     return view('layouts.dashboard');
 })->where( 'path', '([A-z\d\-/_.]+)?' );
 

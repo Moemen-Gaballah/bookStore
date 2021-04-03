@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\Book;
 
 class CategoryController extends Controller
 {
@@ -60,7 +61,24 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        //
+        $category = Category::FindOrFail($id);
+        if($search = \Request::get('q')){
+            if($search == 'lessPrice'){
+                $books = Book::where('category_id', $id)->where('status', 1)->orderBy('price', 'asc')->paginate('20');
+            }elseif($search == 'highPrice'){
+                $books = Book::where('category_id', $id)->where('status', 1)->orderBy('price', 'desc')->paginate('20');
+            }else{
+                $books = Book::where('category_id', $id)->where('status', 1)->latest()->paginate('20');
+            }
+        }else {
+            $books = Book::where('category_id', $id)->where('status', 1)->latest()->paginate('20');
+        }
+
+        // $category = Category::FindOrFail($id)->with('books')->whereHas('books', function ($query){
+        //     $query->where('status', 1);
+        // })->latest()->paginate('20');
+
+        return response()->json(['data' => $books, 'categoryName' => $category->title, 'message' => 200]);
     }
 
     /**

@@ -3277,7 +3277,7 @@ window.Toast = Toast;
 
 Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_2__.default);
 Vue.component('pagination', __webpack_require__(/*! laravel-vue-pagination */ "./node_modules/laravel-vue-pagination/dist/laravel-vue-pagination.common.js"));
-var routes = [// { path: '/dashboard', component: require('./components/Dashboard.vue').default },
+var routes = [// { path: '/dashboard', component: require('../components/Dashboard.vue').default },
 {
   path: '/users',
   component: __webpack_require__(/*! ../components/Users.vue */ "./resources/backend/components/Users.vue").default

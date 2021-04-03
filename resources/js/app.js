@@ -10,16 +10,41 @@ require('/js/carousel/owl.carousel.js');
 
 window.Vue = require('vue').default;
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
+// ES6 Modules or TypeScript
+import Swal from 'sweetalert2'
+window.Swal = Swal;
 
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener('mouseenter', Swal.stopTimer)
+    toast.addEventListener('mouseleave', Swal.resumeTimer)
+  }
+})
+
+window.Toast = Toast;
+
+import VueRouter from 'vue-router'
+Vue.use(VueRouter)
+
+Vue.component('pagination', require('laravel-vue-pagination'));
+
+let routes = [
+  // { path: '/dashboard', component: require('./components/Dashboard.vue').default },
+  // { path: '/users', component: require('../components/Users.vue').default },
+  { path: '/categories/:id', component: require('./components/pages/frontend/Category.vue').default },
+  { path: '/category', component: require('./components/pages/frontend/Category.vue').default },
+  // { path: '/books/{id}', component: require('./components/pages/frontend/Books.vue').default },
+  // { path: '/comments', component: require('../components/Comments.vue').default }
+  // ,
+  // { path: '/invoice', component: require('./components/Invoice.vue').default },
+  // { path: '*', component: require('./components/NotFound.vue').default }
+]
+
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('Home', require('./components/pages/frontend/Home.vue').default);
@@ -33,7 +58,10 @@ Vue.component('AppFooter', require('./components/layouts/AppFooter.vue').default
 Vue.component('Category', require('./components/pages/frontend/Category.vue').default);
 Vue.component('Cart', require('./components/pages/frontend/Cart.vue').default);
 
-
+const router = new VueRouter({
+    mode: 'history',
+    routes // short for `routes: routes`
+})
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -43,6 +71,7 @@ Vue.component('Cart', require('./components/pages/frontend/Cart.vue').default);
 
 const app = new Vue({
     el: '#app',
+    router,
 });
 
 $(document).ready(function()

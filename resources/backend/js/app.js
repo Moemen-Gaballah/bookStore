@@ -42,7 +42,7 @@ Vue.component('pagination', require('laravel-vue-pagination'));
 
 
 let routes = [
-  // { path: '/dashboard', component: require('./components/Dashboard.vue').default },
+  // { path: '/dashboard', component: require('../components/Dashboard.vue').default },
   { path: '/users', component: require('../components/Users.vue').default },
   { path: '/categories', component: require('../components/Categories.vue').default },
   { path: '/books', component: require('../components/Books.vue').default },

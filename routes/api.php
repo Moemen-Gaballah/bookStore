@@ -29,6 +29,8 @@ Route::get('userSearch', [UserController::class, 'search']);
 Route::apiResources(['/category' => CategoryController::class]);
 Route::get('allcategory', [CategoryController::class, 'getAll']);
 
+Route::get('categories/{id}', [CategoryController::class, 'show']); // for frontend page
+
 Route::apiResources(['/book' => BookController::class]);
 Route::post('/book/{id}', [BookController::class, 'update']); // done add request method post for dataFrom & file
 
