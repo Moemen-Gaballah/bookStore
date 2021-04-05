@@ -14,6 +14,16 @@ window.Vue = require('vue').default;
 import Swal from 'sweetalert2'
 window.Swal = Swal;
 
+// import Vue Router
+import VueRouter from 'vue-router'
+Vue.use(VueRouter)
+
+// import Vuex
+
+import store from "./store/store"
+
+
+
 const Toast = Swal.mixin({
   toast: true,
   position: 'top-end',
@@ -28,13 +38,30 @@ const Toast = Swal.mixin({
 
 window.Toast = Toast;
 
-import VueRouter from 'vue-router'
-Vue.use(VueRouter)
+
+
+// import Vuex from 'vuex'
+// Vue.use(Vuex)
+// // Vue.prototype.$store = store;
+//
+//
+// const store = new Vuex.Store({
+//   state: {
+//     countItemInCart: 0
+//   }
+//   // mutations: {
+//   // 	countItemInCart: state => state.countItemInCart  ,
+//   // }
+// });
+
+
+
+
 
 Vue.component('pagination', require('laravel-vue-pagination'));
 
 let routes = [
-  // { path: '/dashboard', component: require('./components/Dashboard.vue').default },
+  { path: '/', component: require('./components/pages/frontend/Home.vue').default },
   // { path: '/users', component: require('../components/Users.vue').default },
   { path: '/categories/:id', component: require('./components/pages/frontend/Category.vue').default },
   { path: '/category', component: require('./components/pages/frontend/Category.vue').default },
@@ -72,10 +99,35 @@ const router = new VueRouter({
 const app = new Vue({
     el: '#app',
     router,
+    store,
 });
 
 $(document).ready(function()
 {
+
+// habd هبد اضافة العدد للعربة
+
+// $('.fa-shopping-cart').click(function() {
+//     var count = 0;
+//     if(JSON.parse(localStorage.getItem("carts")) != null){
+//         JSON.parse(localStorage.getItem("carts")).forEach(item =>{
+//            if(item !=' ' &&  item!=null){
+//                  count+=1;
+//               }
+//            })
+//     }
+//     $('.countInCart').html(count);
+// });
+// var count = 0;
+// if(JSON.parse(localStorage.getItem("carts")) != null){
+//     JSON.parse(localStorage.getItem("carts")).forEach(item =>{
+//        if(item !=' ' &&  item!=null){
+//              count+=1;
+//           }
+//        })
+// }
+// $('.countInCart').html(count);
+
 
     // page SliderProducts
     if($('.bbb_viewed_slider').length)

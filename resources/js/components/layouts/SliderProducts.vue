@@ -15,6 +15,7 @@
                         </div>
                         <div class="bbb_viewed_slider_container">
                             <div class="owl-carousel owl-theme bbb_viewed_slider">
+
                                 <div class="owl-item">
                                     <div class="bbb_viewed_item discount d-flex flex-column align-items-center justify-content-center text-center">
                                         <div class="bbb_viewed_image"><img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560924153/alcatel-smartphones-einsteiger-mittelklasse-neu-3m.jpg" alt=""></div>

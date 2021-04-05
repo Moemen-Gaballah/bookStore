@@ -141,7 +141,7 @@ class BookController extends Controller
             $request->merge([ 'image' => $filename ]);
 
             if($currentPhoto){
-                $oldUserPhoto = public_path('img/book/').$currentPhoto;
+                $oldUserPhoto = public_path('img/book/'.$currentPhoto);
                 if(file_exists($oldUserPhoto)){
                     unlink($oldUserPhoto);
                 }

@@ -3,6 +3,8 @@
         <div class="container">
 
             <p class="path">
+                <!-- <p @click="increase"><i class="fas fa-plus"></i>+</p>
+                <p @click="decrease"><i class="fas fa-minu"></i>-</p> -->
                 <i class="fas fa-home"></i>
                 <a href="/">
                     الرئيسية
@@ -259,22 +261,23 @@
         }
 </style>
 
+
+
 <script>
+
+
     export default {
         data() {
             return {
                 books: {},
                 categoryName: '',
-                countItemInCart: 0,
             }
         },
         methods: {
             sortItem(type='') {
                 axios.get('/api/categories/'+ this.$route.params.id+'?q='+type)
                     .then((data) => {
-
                         this.books = data.data.data
-
                     })
                     .catch(() => {
 
@@ -291,12 +294,12 @@
 
                 // =========================================
 
-                console.log(JSON.parse(localStorage.getItem("carts")));
                 var carts = [];
-                var count = 1;
-                // console.log(JSON.parse(localStorage.getItem("carts")));
+                var count = 0;
+                var countForId = 0;
+
                 if(JSON.parse(localStorage.getItem("carts")) != null){
-                    // carts[] = JSON.parse(localStorage.getItem("carts"));
+
                     JSON.parse(localStorage.getItem("carts")).forEach((item,index) =>{
                        if(item !=' ' &&  item!=null){
                              carts[index] = item;
@@ -304,34 +307,32 @@
                        })
 
                     if(typeof JSON.parse(localStorage.getItem("carts"))[id] !== 'undefined'){
-                        count = JSON.parse(localStorage.getItem("carts"))[id] +1;
+                        countForId = JSON.parse(localStorage.getItem("carts"))[id] +1;
+                    }else{
+                        countForId = 1;
                     }
-
+                }else {
+                    countForId = 1;
                 }
 
-                carts[id] = count;
-
+                carts[id] = countForId;
                 localStorage.setItem("carts", JSON.stringify(carts));
-
-                // var storedNames = JSON.parse(localStorage.getItem("carts"));
-                // console.log(storedNames);
+                this.countItemCart();
             },
             countItemCart() {
                 var count = 0;
                 if(JSON.parse(localStorage.getItem("carts")) != null){
-                    JSON.parse(localStorage.getItem("carts")).forEach(item =>{
-                       if(item !=' ' &&  item!=null){
-                             count+=1;
-                          }
-                       })
-                }
-                this.countItemInCart = count;
-
-                Fire.$emit('countItemInCart')
+                      JSON.parse(localStorage.getItem("carts")).forEach(item =>{
+                         if(item !=' ' &&  item!=null){
+                               count+=1;
+                            }
+                         })
+                  }
+                this.$store.state.counter = count;
             }
         },
         created() {
-            this.countItemCart();
+            this.countItemCart()
             axios.get('/api/categories/'+ this.$route.params.id)
                 .then((data) => {
                     this.books = data.data.data

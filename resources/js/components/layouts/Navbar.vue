@@ -39,21 +39,14 @@
                             <li class="list-inline-item mr-1"><a class="nav-link"><i class="fa fa-globe-africa"></i></a></li>
                             <li class="list-inline-item mr-1"><a class="nav-link"><i class="fa fa-user"></i></a></li>
                             <li class="list-inline-item  mr-1"><a class="nav-link"><i class="fa fa-search"></i></a></li>
-                            <li class="list-inline-item mr-1"><a class="nav-link"><i class="fa fa-cart-plus"></i>{{countItemInCart}}</a></li>
+                            <li class="list-inline-item mr-1"><a class="nav-link"><i class="fa fa-cart-plus"></i>
+                            <span class="cartCount"> {{counter}} </span>
+                            </a></li>
                         </ul>
                     </div>
                   </div>
-
           </div>
         </nav>
-            <!-- <div class="login ml-0">
-                <ul class="list-inline icons">
-                    <li class="list-inline-item mr-1"><a class="nav-link"><i class="fa fa-globe-africa"></i></a></li>
-                    <li class="list-inline-item mr-1"><a class="nav-link"><i class="fa fa-user"></i></a></li>
-                    <li class="list-inline-item  mr-1"><a class="nav-link"><i class="fa fa-search"></i></a></li>
-                    <li class="list-inline-item mr-1"><a class="nav-link"><i class="fa fa-cart-plus"></i></a></li>
-                </ul>
-            </div> -->
 
     </div>
 </template>
@@ -106,7 +99,7 @@
     }
 
     .main-navbar .login .icons a{
-        padding: 4px 8px !important;
+        padding: 0px 6px !important;
         border: 1px solid #FFF;
         border-radius: 50%;
 
@@ -115,6 +108,17 @@
     .main-navbar .login .icons a i {
         font-weight: 700;
         font-size: 16px;
+    }
+
+    .main-navbar .cartCount {
+        position: absolute;
+        top: 12px;
+        padding: 2px 4px;
+        border: 1px solid #00a99d;
+        border-radius: 50%;
+        background-color: #FFF;
+        color: #00a99d;
+        font-size: 12px;
     }
 
     @media (max-width: 992px) {
@@ -128,36 +132,41 @@
             direction: ltr !important;
             text-align: right !important;
         }
+
+        .main-navbar .cartCount {
+            top: auto;
+        }
       }
 
 </style>
 
 <script>
     export default {
+        computed:{
+            counter() {
+                return this.$store.state.counter
+            }
+        },
         data() {
             return {
-                countItemInCart:0
+
             }
         },
         methods: {
             countItemCart() {
                 var count = 0;
                 if(JSON.parse(localStorage.getItem("carts")) != null){
-                    JSON.parse(localStorage.getItem("carts")).forEach(item =>{
-                       if(item !=' ' &&  item!=null){
-                             count+=1;
-                          }
-                       })
-                }
-                this.countItemInCart = count;
-                console.log(count + 'nav');
+                      JSON.parse(localStorage.getItem("carts")).forEach(item =>{
+                         if(item !=' ' &&  item!=null){
+                               count+=1;
+                            }
+                         })
+                  }
+                this.$store.state.counter = count;
             }
         },
         created() {
-            this.countItemCart(),
-            Fire.$on('countItemInCart', () => {
-               this.countItemCart();
-           });
+            this.countItemCart()
         }
     }
 </script>
