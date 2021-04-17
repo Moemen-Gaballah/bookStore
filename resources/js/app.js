@@ -29,6 +29,7 @@ const Toast = Swal.mixin({
   position: 'top-end',
   showConfirmButton: false,
   timer: 3000,
+  width: '240px',
   timerProgressBar: true,
   didOpen: (toast) => {
     toast.addEventListener('mouseenter', Swal.stopTimer)
@@ -63,8 +64,10 @@ Vue.component('pagination', require('laravel-vue-pagination'));
 let routes = [
   { path: '/', component: require('./components/pages/frontend/Home.vue').default },
   // { path: '/users', component: require('../components/Users.vue').default },
-  { path: '/categories/:id', component: require('./components/pages/frontend/Category.vue').default },
   { path: '/category', component: require('./components/pages/frontend/Category.vue').default },
+  { path: '/categories/:id', component: require('./components/pages/frontend/Category.vue').default },
+  { path: '/book/:id', component: require('./components/pages/frontend/Book.vue').default },
+  { path: '/cart', component: require('./components/pages/frontend/Cart.vue').default },
   // { path: '/books/{id}', component: require('./components/pages/frontend/Books.vue').default },
   // { path: '/comments', component: require('../components/Comments.vue').default }
   // ,
@@ -78,6 +81,7 @@ Vue.component('Home', require('./components/pages/frontend/Home.vue').default);
 Vue.component('Navbar', require('./components/layouts/Navbar.vue').default);
 Vue.component('Slider', require('./components/layouts/Slider.vue').default);
 Vue.component('SliderProducts', require('./components/layouts/SliderProducts.vue').default);
+// Vue.component('SliderProductsBefore', require('./components/layouts/SliderProductsBefore.vue').default);
 Vue.component('FeaturePayment', require('./components/layouts/FeaturePayment.vue').default);
 Vue.component('Testimonials', require('./components/layouts/Testimonials.vue').default);
 Vue.component('AppFooter', require('./components/layouts/AppFooter.vue').default);
@@ -89,6 +93,25 @@ const router = new VueRouter({
     mode: 'history',
     routes // short for `routes: routes`
 })
+
+
+// make filters global
+Vue.filter('str_limit', function(text) {
+  // if (!text) return '';
+  // text = text.toString();
+
+  // if (text.length <= 20) {
+  //   return text;
+  // }
+  // return text.substr(0, 20) + '...';
+
+  if(text.length > 21) {
+         return '...' + text.slice(0,20) ;
+      }
+      return text;
+});
+
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -104,30 +127,6 @@ const app = new Vue({
 
 $(document).ready(function()
 {
-
-// habd هبد اضافة العدد للعربة
-
-// $('.fa-shopping-cart').click(function() {
-//     var count = 0;
-//     if(JSON.parse(localStorage.getItem("carts")) != null){
-//         JSON.parse(localStorage.getItem("carts")).forEach(item =>{
-//            if(item !=' ' &&  item!=null){
-//                  count+=1;
-//               }
-//            })
-//     }
-//     $('.countInCart').html(count);
-// });
-// var count = 0;
-// if(JSON.parse(localStorage.getItem("carts")) != null){
-//     JSON.parse(localStorage.getItem("carts")).forEach(item =>{
-//        if(item !=' ' &&  item!=null){
-//              count+=1;
-//           }
-//        })
-// }
-// $('.countInCart').html(count);
-
 
     // page SliderProducts
     if($('.bbb_viewed_slider').length)
@@ -175,31 +174,31 @@ $(document).ready(function()
 
 
 
-// page Testimonials
-if($('.slider_testimonial').length)
-{
-    var viewedSliderTestimonial = $('.slider_testimonial');
-
-    viewedSliderTestimonial.owlCarousel(
+    // page Testimonials
+    if($('.slider_testimonial').length)
     {
-            loop:true,
-            margin:30,
-            autoplay:true,
-            autoplayTimeout:4000,
-            nav:false,
-            dots:false,
-            responsive:
-            {
-                0:{items:1},
-                768:{items:2}
-                // ,
-                // 768:{items:3},
-                // 991:{items:4},
-                // 1199:{items:6}
-            }
-    });
+        var viewedSliderTestimonial = $('.slider_testimonial');
 
-}
+        viewedSliderTestimonial.owlCarousel(
+        {
+                loop:true,
+                margin:30,
+                autoplay:true,
+                autoplayTimeout:4000,
+                nav:false,
+                dots:false,
+                responsive:
+                {
+                    0:{items:1},
+                    768:{items:2},
+                    // ,
+                    // 768:{items:3},
+                    // 991:{items:4},
+                    // 1199:{items:6}
+                }
+        });
+
+    }
 
 
 

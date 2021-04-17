@@ -3,35 +3,14 @@
         <nav class="navbar navbar-expand-lg fixed-top">
             <div class="container">
 
-                <a class="navbar-brand" href="#">bookStore</a>
+                <router-link class="navbar-brand" to="/">bookStore</router-link>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"><i class="fa fa-sliders-h"></i></span>
                 </button>
                   <div class="category collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ml-auto">
-                      <li class="nav-item active">
-                        <a class="nav-link" href="#">الرئيسية -<span class="sr-only">(current)</span></a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="#">روايات -</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="#">تطوير ذات -</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="#">الشعر -</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="#">قصص -</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="#">ثقافة عامة -</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="#">دور نشر عربية -</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="#">كتب مترجمة</a>
+                      <li v-for="category in allCategories.data" class="nav-item">
+                        <router-link :to="'/categories/'+category.id" class="nav-link">{{category.title}}</router-link>
                       </li>
                     </ul>
                     <div class="login ml-0">
@@ -39,9 +18,9 @@
                             <li class="list-inline-item mr-1"><a class="nav-link"><i class="fa fa-globe-africa"></i></a></li>
                             <li class="list-inline-item mr-1"><a class="nav-link"><i class="fa fa-user"></i></a></li>
                             <li class="list-inline-item  mr-1"><a class="nav-link"><i class="fa fa-search"></i></a></li>
-                            <li class="list-inline-item mr-1"><a class="nav-link"><i class="fa fa-cart-plus"></i>
+                            <li class="list-inline-item mr-1"><router-link to="/cart" class="nav-link"><i class="fa fa-cart-plus"></i>
                             <span class="cartCount"> {{counter}} </span>
-                            </a></li>
+                            </router-link></li>
                         </ul>
                     </div>
                   </div>
@@ -149,7 +128,7 @@
         },
         data() {
             return {
-
+                allCategories: {}
             }
         },
         methods: {
@@ -163,10 +142,21 @@
                          })
                   }
                 this.$store.state.counter = count;
+            },
+            getCategories() {
+                axios.get('/api/getCategories/')
+                    .then((data) => {
+                        this.allCategories = data.data;
+                        console.log(data.data)
+                    })
+                    .catch(() => {
+
+                    })
             }
         },
         created() {
             this.countItemCart()
+            this.getCategories()
         }
     }
 </script>

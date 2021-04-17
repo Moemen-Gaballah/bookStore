@@ -6,6 +6,7 @@
         <!-- CSRF Token -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>Book Store | Moemen</title>
+
         <link rel="stylesheet" href="/css/carousel/owl.carousel.min.css">
         <link rel="stylesheet" href="/css/carousel/owl.theme.default.css">
          <link rel="stylesheet" href="/css/app.css">
@@ -24,6 +25,7 @@
             <Testimonials></Testimonials>
             <app-footer></app-footer>
         </div>
+   <!--      <script type="text/javascript" src="https://platform-api.sharethis.com/js/sharethis.js#property=607aa06e50181a00189caf45&product=inline-share-buttons" async="async"></script> -->
         <script src="/js/app.js"></script>
     </body>
 </html>

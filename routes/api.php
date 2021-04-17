@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\BookController;
 use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,3 +38,13 @@ Route::post('/book/{id}', [BookController::class, 'update']); // done add reques
 Route::get('bookSearch', [BookController::class, 'search']);
 
 Route::apiResources(['/comment' => CommentController::class]);
+
+// Page For USers
+Route::get('/home', [HomeController::class, 'index']);
+
+// Page For USers
+Route::get('/getCategories', [HomeController::class, 'getCategories']);
+
+
+// Page For get Product From Cart
+Route::post('/getBookForCart', [HomeController::class, 'getBookForCart']);

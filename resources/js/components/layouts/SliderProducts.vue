@@ -1,320 +1,292 @@
 <template>
-<div class="sliderProducts">
-    <div class="container">
-        <div class="bbb_viewed">
-            <div class="row">
-                <div class="col">
-                    <div class="bbb_main_container">
-                        <div class="bbb_viewed_title_container">
-
-                            <h3 class="bbb_viewed_title">Best selling products</h3>
-                            <div class="bbb_viewed_nav_container">
-                                <div class="bbb_viewed_nav bbb_viewed_prev"><i class="fas fa-chevron-left"></i></div>
-                                <div class="bbb_viewed_nav bbb_viewed_next"><i class="fas fa-chevron-right"></i></div>
-                            </div>
-                        </div>
-                        <div class="bbb_viewed_slider_container">
-                            <div class="owl-carousel owl-theme bbb_viewed_slider">
-
-                                <div class="owl-item">
-                                    <div class="bbb_viewed_item discount d-flex flex-column align-items-center justify-content-center text-center">
-                                        <div class="bbb_viewed_image"><img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560924153/alcatel-smartphones-einsteiger-mittelklasse-neu-3m.jpg" alt=""></div>
-                                        <div class="bbb_viewed_content text-center">
-                                            <div class="bbb_viewed_price">₹12225<span>₹13300</span></div>
-                                            <div class="bbb_viewed_name"><a href="#">Alkatel Phone</a></div>
-                                        </div>
-                                        <ul class="item_marks">
-                                            <li class="item_mark item_discount">-25%</li>
-                                            <li class="item_mark item_new">new</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="owl-item">
-                                    <div class="bbb_viewed_item d-flex flex-column align-items-center justify-content-center text-center">
-                                        <div class="bbb_viewed_image"><img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560924221/51_be7qfhil.jpg" alt=""></div>
-                                        <div class="bbb_viewed_content text-center">
-                                            <div class="bbb_viewed_price">₹30079</div>
-                                            <div class="bbb_viewed_name"><a href="#">Samsung LED</a></div>
-                                        </div>
-                                        <ul class="item_marks">
-                                            <li class="item_mark item_discount">-25%</li>
-                                            <li class="item_mark item_new">new</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="owl-item">
-                                    <div class="bbb_viewed_item d-flex flex-column align-items-center justify-content-center text-center">
-                                        <div class="bbb_viewed_image"><img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560924241/8fbb415a2ab2a4de55bb0c8da73c4172--ps.jpg" alt=""></div>
-                                        <div class="bbb_viewed_content text-center">
-                                            <div class="bbb_viewed_price">₹22250</div>
-                                            <div class="bbb_viewed_name"><a href="#">Samsung Mobile</a></div>
-                                        </div>
-                                        <ul class="item_marks">
-                                            <li class="item_mark item_discount">-25%</li>
-                                            <li class="item_mark item_new">new</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="owl-item">
-                                    <div class="bbb_viewed_item is_new d-flex flex-column align-items-center justify-content-center text-center">
-                                        <div class="bbb_viewed_image"><img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560924275/images.jpg" alt=""></div>
-                                        <div class="bbb_viewed_content text-center">
-                                            <div class="bbb_viewed_price">₹1379</div>
-                                            <div class="bbb_viewed_name"><a href="#">Huawei Power</a></div>
-                                        </div>
-                                        <ul class="item_marks">
-                                            <li class="item_mark item_discount">-25%</li>
-                                            <li class="item_mark item_new">new</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="owl-item">
-                                    <div class="bbb_viewed_item discount d-flex flex-column align-items-center justify-content-center text-center">
-                                        <div class="bbb_viewed_image"><img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560924361/21HmjI5eVcL.jpg" alt=""></div>
-                                        <div class="bbb_viewed_content text-center">
-                                            <div class="bbb_viewed_price">₹225<span>₹300</span></div>
-                                            <div class="bbb_viewed_name"><a href="#">Sony Power</a></div>
-                                        </div>
-                                        <ul class="item_marks">
-                                            <li class="item_mark item_discount">-25%</li>
-                                            <li class="item_mark item_new">new</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="owl-item">
-                                    <div class="bbb_viewed_item d-flex flex-column align-items-center justify-content-center text-center">
-                                        <div class="bbb_viewed_image"><img src="https://res.cloudinary.com/dxfq3iotg/image/upload/v1560924241/8fbb415a2ab2a4de55bb0c8da73c4172--ps.jpg" alt=""></div>
-                                        <div class="bbb_viewed_content text-center">
-                                            <div class="bbb_viewed_price">₹13275</div>
-                                            <div class="bbb_viewed_name"><a href="#">Speedlink Mobile</a></div>
-                                        </div>
-                                        <ul class="item_marks">
-                                            <li class="item_mark item_discount">-25%</li>
-                                            <li class="item_mark item_new">new</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    <div class="sliderProducts" >
+        <div class="container">
+            <!-- <div v-for="category in allCategories.data"> -->
+            <!-- <div> -->
+            <div v-for="category in allCategories.data">
+                <div class="books">
+                    <div class="bar">
+                        <span class="float-right">
+                            {{category.title}}
+                        </span>
+                        <span style="background-color:#FFF; border:none;"></span>
                     </div>
-                </div>
+                    <div class="row">
+
+
+                        <div class="owl-carousel owl-theme owl-carousel-products">
+                            <div v-for="book in category.books" class="card">
+                                <router-link :to="'/book/'+book.id">
+                                  <img :src="'../img/book/'+book.image" class="card-img-top" alt="...">
+                                  <div class="card-body">
+                                        <h5 class="card-title">
+                                            {{book.title | str_limit}}
+                                        </h5>
+                                        <p class="card-text">
+                                            {{book.author |  str_limit}}
+                                        </p>
+                                    </div>
+                                </router-link>
+                                <p class="price">
+                                    {{book.price +  ' ج.م'}}
+                                </p>
+                                <button class="btnAddToCart" @click.prevent="addToCart(book.id)" ><i class="fas fa-shopping-cart fa-2x"></i>
+                                </button>
+                            </div> <!-- End div card -->
+                         </div>
+
+                    </div>
+                </div> <!-- end div books -->
             </div>
-        </div>
-    </div>
-</div>
+
+            <!-- </div> -->
+        </div> <!-- End div Container -->
+    </div> <!-- End Div Slider products -->
 </template>
 
-<style scoped>
-@import url('https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800,900|Rubik:300,400,500,700,900');
-
-* {
-    margin: 0;
-    padding: 0;
-    -webkit-font-smoothing: antialiased;
-    -webkit-text-shadow: rgba(0, 0, 0, .01) 0 0 1px;
-    text-shadow: rgba(0, 0, 0, .01) 0 0 1px
-}
-
-body {
-    font-family: 'Rubik', sans-serif;
-    font-size: 14px;
-    font-weight: 400;
-    background: #eff6fa;
-    color: #000000
-}
-
-div {
-    display: block;
-    position: relative;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box
-}
-
-.container {
-    margin: auto;
-}
-
-.bbb_viewed {
-    padding-top: 30px;
-    padding-bottom: 60px;
-    /* background: #eff6fa */
-}
-
-.bbb_main_container {
-    background-color: #fff;
-    padding: 11px
-}
-
-.bbb_viewed_title_container {
-    border-bottom: solid 1px #dadada
-}
-
-.bbb_viewed_title {
-    margin-bottom: 16px;
-    margin-top: 8px
-}
-
-.bbb_viewed_nav_container {
-    position: absolute;
-    right: -5px;
-    bottom: 14px
-}
-
-.bbb_viewed_nav {
-    display: inline-block;
-    cursor: pointer
-}
-
-.bbb_viewed_nav i {
-    color: #dadada;
-    font-size: 18px;
-    padding: 5px;
-    -webkit-transition: all 200ms ease;
-    -moz-transition: all 200ms ease;
-    -ms-transition: all 200ms ease;
-    -o-transition: all 200ms ease;
-    transition: all 200ms ease
-}
-
-.bbb_viewed_nav:hover i {
-    color: #606264
-}
-
-.bbb_viewed_prev {
-    margin-right: 15px
-}
-
-.bbb_viewed_slider_container {
-    padding-top: 13px
-}
-
-.bbb_viewed_item {
-    width: 100%;
-    background: #FFFFFF;
-    border-radius: 2px;
-    padding-top: 25px;
-    padding-bottom: 25px;
-    padding-left: 30px;
-    padding-right: 30px
-}
-
-.bbb_viewed_image {
-    width: 150px;
-    height: 150px
-}
-
-.bbb_viewed_image img {
-    display: block;
-    max-width: 100%
-}
-
-.bbb_viewed_content {
-    width: 100%;
-    margin-top: 25px
-}
-
-.bbb_viewed_price {
-    font-size: 16px;
-    color: #000000;
-    font-weight: 500
-}
-
-.bbb_viewed_item.discount .bbb_viewed_price {
-    color: #df3b3b
-}
-
-.bbb_viewed_price span {
-    position: relative;
-    font-size: 12px;
-    font-weight: 400;
-    color: rgba(0, 0, 0, 0.6);
-    margin-left: 8px
-}
-
-.bbb_viewed_price span::after {
-    display: block;
-    position: absolute;
-    top: 6px;
-    left: -2px;
-    width: calc(100% + 4px);
-    height: 1px;
-    background: #8d8d8d;
-    content: ''
-}
-
-.bbb_viewed_name {
-    margin-top: 3px
-}
-
-.bbb_viewed_name a {
-    font-size: 14px;
-    color: #000000;
-    -webkit-transition: all 200ms ease;
-    -moz-transition: all 200ms ease;
-    -ms-transition: all 200ms ease;
-    -o-transition: all 200ms ease;
-    transition: all 200ms ease
-}
-
-.bbb_viewed_name a:hover {
-    color: #0e8ce4
-}
-
-.item_marks {
-    position: absolute;
-    top: 18px;
-    left: 18px
-}
-
-.item_mark {
-    display: none;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    color: #FFFFFF;
-    font-size: 10px;
-    font-weight: 500;
-    line-height: 36px;
-    text-align: center
-}
-
-.item_discount {
-    background: #df3b3b;
-    margin-right: 5px
-}
-
-.item_new {
-    background: #0e8ce4
-}
-
-.bbb_viewed_item.discount .item_discount {
-    display: inline-block
-}
-
-.bbb_viewed_item.is_new .item_new {
-    display: inline-block
-}
-
-@media (max-width: 768px) {
-    .owl-carousel.owl-drag .owl-item {
-        width: 100% !important;
+<style>
+    .sliderProducts {
+        /* height: 400px; */
+        /* background-color: #DDD; */
+        margin: 40px auto;
     }
 
-    .bbb_viewed {
-        padding-bottom: 0;
+    .owl-nav {
+        position: absolute;
+        top: -35px;
+        background-color: #00897d;
+        color:#FFF;
+        overflow: hidden;
+
     }
 
- }
+    .owl-nav div{
+        padding: 0 !important;
+        background-color: #00897d !important;
+        color:#FFF !important;
+        font-size: 35px !important;
+        height: 44px;
+        border-radius: 50%;
+    }
 
+    .owl-carousel-products {
+        padding: 15px;
+        text-align: right;
+        width: 100%;
+        margin: 10px 2px 5px;
+        overflow: hidden;
+        border-radius: 5px;
+        /* box-shadow: 0 0 8px rgba(0,0,0,0.3) */
+    }
+
+
+    .sliderProducts .books {
+        padding: 15px;
+        text-align: right;
+        width: 100%;
+        margin: 30px 2px 5px;
+        overflow: hidden;
+        border-radius: 5px;
+        box-shadow: 0 0 8px rgba(0,0,0,0.3)
+
+    }
+
+
+    .sliderProducts .books .bar{
+        margin: 20px 0 0px;
+    }
+
+        .sliderProducts .books .bar span {
+            background-color: #00897D;
+            padding: 10px;
+            font-size: 22px;
+            margin: -10px -15px 10px;
+            border: 1px solid #00897D;
+            border-radius: 10px 0 0 10px;
+            color: #FFF;
+            font-weight: bold;
+        }
+
+    .sliderProducts .books .bar span:last-of-type{
+        float: left;
+        direction: ltr;
+        font-size: 15px;
+        color: #e2e2e2;
+        border: 1px solid #00897D;
+        border-radius: 50%;
+        margin: -8px 0px;
+    }
+
+    .sliderProducts .books .bar .dropdownSort {
+    padding: 10px;
+    }
+
+    .sliderProducts .books .bar label{
+    margin-right: 22px;
+    font-weight: 600;
+    color: #7b7b7be6;
+    cursor: pointer;
+    width: 100%;
+
+    }
+
+
+
+
+    .owl-carousel-products .card{
+        height: 400px;
+        width: 100%;
+        margin: 2px;
+        overflow: hidden;
+        border: 0;
+        padding: 15px;
+        box-shadow: 0 0 1px rgb(0 0 0 / 0%), 0 1px 3px rgb(0 0 0 / 0%);
+    }
+
+    .owl-carousel-products .card a{
+        text-decoration: none;
+    }
+
+    .owl-carousel-products .card:hover{
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        /* transition: all .5 ease-in-out; */
+        transition: box-shadow .5s;
+    }
+
+    .owl-carousel-products .card img{
+        height: 280px;
+        width: 200px;
+        margin: auto;
+        display: block;
+    }
+
+
+    .owl-carousel-products .card .card-body{
+        padding: 18px 0 0 0;
+    }
+
+    .owl-carousel-products .card .card-title{
+        float: right;
+        color: #4c4c4c;
+        font-size: 20px;
+        margin-bottom: 0;
+    }
+
+    .owl-carousel-products .card .card-text{
+        color: #8a8a8a;
+        font-size: 16px;
+    }
+
+
+    .owl-carousel-products .card a, .btnAddToCart{
+        color: #8a8a8a;
+    }
+
+    .owl-carousel-products .card a:hover, .btnAddToCart:hover{
+        color: #00A99D;
+    }
+
+    .owl-carousel-products .card i{
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+    }
+
+    .owl-carousel-products .card .price{
+        color: #00A99D;
+        font-size: 17px;
+    }
 </style>
 
 
 
 <script>
+    // $(document).ready(function(){
+    //
+    // });
+
     export default {
-        mounted() {
-            console.log('Component mounted.')
-        }
+        data() {
+            return {
+                allCategories : {},
+                categoryName : 'categoryName',
+                book: {
+                    title: 'title',
+                    id: 3,
+                    author: 'moemen',
+                    image: '1617376366.jpg',
+                    price: 19,
+                }
+            }
+        },
+        methods: {
+            getCategories() {
+                axios.get('/api/home/')
+                    .then((data) => {
+                        this.allCategories = data.data;
+                        console.log(data.data)
+                    })
+                    .catch(() => {
+
+                    })
+            },
+            addToCart(id){
+                var carts = [];
+                var count = 0;
+                var countForId = 0;
+                if(JSON.parse(localStorage.getItem("carts")) != null){
+                    JSON.parse(localStorage.getItem("carts")).forEach((item,index) =>{
+                       if(item !=' ' &&  item!=null){
+                             carts[index] = item;
+                          }
+                       })
+
+                    if(typeof JSON.parse(localStorage.getItem("carts"))[id] !== 'undefined'){
+                        countForId = JSON.parse(localStorage.getItem("carts"))[id] +1;
+                    }else{
+                        countForId = 1;
+                    }
+                }else {
+                    countForId = 1;
+                }
+
+                carts[id] = countForId;
+                localStorage.setItem("carts", JSON.stringify(carts));
+                this.countItemCart();
+            },
+            countItemCart() {
+                var count = 0;
+                if(JSON.parse(localStorage.getItem("carts")) != null){
+                      JSON.parse(localStorage.getItem("carts")).forEach(item =>{
+                         if(item !=' ' &&  item!=null){
+                               count+=1;
+                            }
+                         })
+                  }
+                this.$store.state.counter = count;
+            }
+        },
+        created() {
+            this.getCategories();
+
+            setTimeout(function () {
+
+                $(".owl-carousel-products").owlCarousel({
+                    items:4,
+                     loop:true,
+                     margin:10,
+                     autoplay:true,
+                     autoplayTimeout:3000,
+                     autoplayHoverPause:true,
+                     nav:true,
+                     dots: false,
+                     navText: ["<div class='nav-button owl-prev'>‹</div>", "<div class='nav-button owl-next'>›</div>"],
+                });
+            }, 3000)
+
+        },
+        // mounted() {
+        //     // this.runSlider();
+        // }
     }
 </script>

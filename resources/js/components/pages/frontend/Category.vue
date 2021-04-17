@@ -63,12 +63,12 @@
                         <div class="card">
                             <router-link :to="'/book/'+book.id">
                               <img :src="'../img/book/'+book.image" class="card-img-top" alt="...">
-                              <div class="card-body">
+                              <div class="card-body" style="direction: ltr;">
                                     <h5 class="card-title">
-                                        {{book.title}}
+                                        {{book.title | str_limit}}
                                     </h5>
                                     <p class="card-text">
-                                        {{book.author}}
+                                        {{book.author | str_limit}}
                                     </p>
                                 </div>
                             </router-link>
@@ -81,7 +81,7 @@
                     </div>
 
                 </div>
-            </div>
+            </div> <!-- end div books -->
         </div>
     </div>
 </template>

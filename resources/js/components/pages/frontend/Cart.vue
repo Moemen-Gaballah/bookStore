@@ -23,46 +23,60 @@
                 </div>
                 <div class="col-12 mt-5">
                     <div class="content">
-                        <div class="box">
-                            <span class="remove">
-                                <i class="far fa-times-circle text-danger"></i>
-                            </span>
-                            <img src="img/book/01.png">
-                            <div class="description">
-                                <h3 class="title">
-                                    {{ cartItems.name }}
-                                </h3>
-                                <p class="price">
-                                    {{ cartItems.price }}
-                                    ج.م
-                                </p>
-                                <p class="totlePriceOneProduct">
-                                    الاجمالى
-                                    {{ (cartItems.price *  cartItems.count).toFixed(2)}}
-                                    ج.م
-                                </p>
+                        <div v-if="Object.keys(cartItems).length">
+                            <div  v-for="(book,index) in cartItems" class="box mt-4">
+                                <span @click="deleteItem(book,index)" class="remove">
+                                    <i class="far fa-times-circle text-danger"></i>
+                                </span>
+                                <img :src="'img/book/'+book.image">
+                                <div class="description">
+                                    <h3 class="title">
+                                        {{ book.title }}
+                                    </h3>
+                                    <p class="price">
+                                        {{ book.price }}
+                                        ج.م
+                                    </p>
+                                    <p class="totlePriceOneProduct">
+                                        الاجمالى
+                                        {{ (book.price *  book.count).toFixed(2)}}
+                                        ج.م
+                                    </p>
+                                </div>
+                                <div class="quantity text-center">
+                                    <p>
+                                        الكمية<span class="text-danger ml-5">*</span>
+                                    </p>
+                                    <span @click="increaseItem(index)" class="plus">
+                                        +
+                                    </span>
+                                    <span class="count">
+                                        {{ book.count }}
+                                    </span>
+                                    <span @click="decreaseItem(index)" class="minus">
+                                        -
+                                    </span>
+                                </div>
                             </div>
-                            <div class="quantity text-center">
-                                <p>
-                                    الكمية<span class="text-danger ml-5">*</span>
-                                </p>
-                                <span @click="increaseItem" class="plus">
-                                    +
-                                </span>
-                                <span class="count">
-                                    {{ cartItems.count }}
-                                </span>
-                                <span @click="decreaseItem" class="minus">
-                                    -
-                                </span>
+                            <div class="completeOrder mt-5">
+                                <div class="calc">
+                                    المجموع
+                                    35220
+                                </div>
                             </div>
+                        </div> <!-- end div box -->
+
+                        <div v-else class="cartEmpty text-center">
+                            <i class="fas fa-heart-broken"></i>
+                            <p class="mt-2 emptyText">السلة فارغة</p>
+                            <router-link to="/" class="backToStore">
+                                <i class="fas fa-angle-right"></i>
+                                العودة للمتجر
+                            </router-link>
                         </div>
                     </div>
                 </div>
-
-
-
-            </div>
+            </div> <!-- End div row -->
 
 
         </div>
@@ -96,6 +110,7 @@
     .cart .makeHr {
         max-width: 80%;
         margin: auto;
+        text-align: center;
     }
 
     .cart .makeHr hr{
@@ -133,7 +148,7 @@
         border: 1px solid #DDD;
         padding: 0 10px 10px 10px;
         width: 60%;
-        margin: auto 10%;
+        margin: auto;
     }
 
     .cart .content .box .remove i {
@@ -192,6 +207,46 @@
         width: 200px;
     }
 
+    .cart .completeOrder{
+        border: 1px solid #DDD;
+        width: 60%;
+        margin: auto;
+        font-size: 18px;
+        padding: 5px;
+    }
+
+    .cartEmpty {
+        color: #E1E1E1;
+        margin-top: 60px;
+    }
+
+    .cartEmpty i{
+        font-size: 100px;
+    }
+
+    .cartEmpty .emptyText{
+        font-size: 20px;
+        color: #999 !important;
+    }
+
+    .cartEmpty .backToStore{
+        background-color: #00897D;
+        color: #fff;
+        padding: 10px 15px;
+        width: 300px;
+        display: inline-block;
+        font-size: 18px;
+        border-radius: 8px;
+        font-family: inherit !important;
+        text-decoration: none;
+    }
+
+    .cartEmpty .backToStore i{
+        font-size: 22px;
+        float: right;
+        line-height: 1.3;
+    }
+
 </style>
 
 
@@ -201,32 +256,73 @@
           return {
             carts: {},
             token: null,
-            len:0,
             totalcost:0,
             cartItems : {
-                name: 'شكل الافكار',
-                count: 1,
-                price: 216.83
             }
           }
         },
         methods: {
-            // loadCart() {
-            //     this.carts = JSON.parse(sessionStorage.getItem('shoppingCart'));
-            // },
+            getCart() {
+                if(JSON.parse(localStorage.getItem("carts")) != null){
 
-            increaseItem () {
-                this.cartItems.count +=1
+                    JSON.parse(localStorage.getItem("carts")).forEach((item,index) =>{
+                       if(item !=' ' &&  item!=null){
+                             this.carts[index] = item;
+                          }
+                       })
+
+
+                            axios({
+                                 method: 'post',
+                                 url: '/api/getBookForCart/',
+                                 data: this.carts,
+                             }).then((response) => {
+                                   console.log(response);
+                                   this.cartItems = response.data.data;
+                                      console.log(response.data.data);
+                              }).catch((error) => {
+                                this.errors.record(error.response.data.errors)
+                                  this.$Progress.fail()
+                              });
+
+                       // getBookForCart
+                }else {
+                    this.carts = 0;
+                }
+                console.log('lengthobject'+Object.keys(this.cartItems).length);
             },
 
-            decreaseItem () {
-                if( this.cartItems.count > 0){
-                    this.cartItems.count -=1
+            increaseItem (index) {
+                console.log(index)
+                this.cartItems[index].count +=1
+            },
+            decreaseItem (index) {
+                if( this.cartItems[index].count > 0){
+                    this.cartItems[index].count -=1
                 }
+            },
+            deleteItem (book, index) {
+                console.log(book.id)
+                    var carts = [];
+                        JSON.parse(localStorage.getItem("carts")).forEach((item,index) =>{
+                           if(item !=' ' &&  item!=null && index!= book.id){
+                                 carts[index] = item;
+                              }
+                           })
+
+                    localStorage.setItem("carts", JSON.stringify(carts));
+                    this.getCart();
+
+                // this.cartItems.splice(item.id, 1);
+                // console.log(this.cartItems[index] ;
+                this.$delete(this.cartItems, index);
+
+                // this.cartItems[id].count +=1
             }
+
         },
         created() {
-
+            this.getCart();
         }
     };
 </script>

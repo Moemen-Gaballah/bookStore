@@ -25,7 +25,7 @@
                                             <div class="city">تلا</div>
                                         </div>
                                         <ul class="userImg">
-                                            <li class="inline-block"><img src='img/user/user.png'></li>
+                                            <li class="inline-block"><img src='/img/user/user.png'></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -47,7 +47,7 @@
                                             <div class="city">اكتوبر</div>
                                         </div>
                                         <ul class="userImg">
-                                            <li class="inline-block"><img src='img/user/user.png'></li>
+                                            <li class="inline-block"><img src='/img/user/user.png'></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -69,7 +69,7 @@
                                             <div class="city">السويس</div>
                                         </div>
                                         <ul class="userImg">
-                                            <li class="inline-block"><img src='img/user/user.png'></li>
+                                            <li class="inline-block"><img src="/img/user/user.png"></li>
                                         </ul>
                                     </div>
                                 </div>

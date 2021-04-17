@@ -36,7 +36,7 @@
                                 <img src="/img/icon/appstore.png">
                             </a>
                             <a href="#" target="_blank">
-                                <img src="img/icon/googleplay.png">
+                                <img src="/img/icon/googleplay.png">
                             </a>
                         </div>
                     </div>

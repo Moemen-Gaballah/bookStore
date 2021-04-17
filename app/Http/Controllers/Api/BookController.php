@@ -65,8 +65,10 @@ class BookController extends Controller
             'description' => 'required|string|min:3|max:1000',
             'category_id' => 'required|integer',
             'price' => 'required|regex:/^\d{1,13}(\.\d{1,4})?$/',
-             'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
+
+       $request_data = $request->all(); 
 
         if($request->image){
             $filename = time() .'.'. $request->image->getClientOriginalExtension();
@@ -77,11 +79,12 @@ class BookController extends Controller
 
             ->save(public_path('img/book/' . $filename));
 
-            $request['image'] = $filename;
+            $request_data['image'] = $filename;
 
         }// end of if request->image
 
-        return Book::create($request->all());
+
+        return Book::create($request_data);
     }
 
     /**
@@ -92,7 +95,15 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        //
+        $book = Book::findOrFail($id);
+        if($book->status == 1){
+            return response()->json(['data' =>$book, 'message' => 200]);
+        }else{
+            return response()->json(['data' =>'book not found', 'message' => 401]);
+        }
+
+
+
     }
 
     /**

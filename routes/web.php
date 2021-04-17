@@ -29,9 +29,9 @@ Route::get('/', function () {
 // });
 
 
-// Route::get('/dashboard', function () {
-//     return view('layouts.dashboard');
-// });
+Route::get('/dashboard', function () {
+    return view('layouts.dashboard');
+});
 
 Route::get('/{path}', function () {
     return view('layouts.frontend');
