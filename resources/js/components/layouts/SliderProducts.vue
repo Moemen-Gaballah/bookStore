@@ -273,14 +273,14 @@
 
                 $(".owl-carousel-products").owlCarousel({
                     items:4,
-                     loop:true,
-                     margin:10,
-                     autoplay:true,
-                     autoplayTimeout:3000,
-                     autoplayHoverPause:true,
-                     nav:true,
+                    loop:true,
+                    margin:10,
+                    autoplay:true,
+                    autoplayTimeout:3000,
+                    autoplayHoverPause:true,
+                     nav:false,
                      dots: false,
-                     navText: ["<div class='nav-button owl-prev'>‹</div>", "<div class='nav-button owl-next'>›</div>"],
+                     // navText: ["<div class='nav-button owl-prev'>‹</div>", "<div class='nav-button owl-next'>›</div>"],
                 });
             }, 3000)
 
