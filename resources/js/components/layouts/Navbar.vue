@@ -16,8 +16,8 @@
                     <div class="login ml-0">
                         <ul class="list-inline icons">
                             <li class="list-inline-item mr-1"><a class="nav-link"><i class="fa fa-globe-africa"></i></a></li>
-                            <li class="list-inline-item mr-1"><a class="nav-link"><i class="fa fa-user"></i></a></li>
-                            <li class="list-inline-item  mr-1"><a class="nav-link"><i class="fa fa-search"></i></a></li>
+                            <li type="button" data-toggle="modal" data-target="#exampleModal"class="list-inline-item mr-1"><a class="nav-link"><i class="fa fa-user"></i></a></li>
+                            <li  class="list-inline-item mr-1"><a class="nav-link"><i class="fa fa-search"></i></a></li>
                             <li class="list-inline-item mr-1"><router-link to="/cart" class="nav-link"><i class="fa fa-cart-plus"></i>
                             <span class="cartCount"> {{counter}} </span>
                             </router-link></li>
@@ -27,6 +27,39 @@
           </div>
         </nav>
 
+        <!-- Start form login -->
+
+            <!-- Modal -->
+            <div class="modal fade" style="direction:ltr; color:#6d6a6a" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <form>
+                      <div class="form-group">
+                        <label for="email" class="col-form-label">email:</label>
+                        <input v-model="login.email" type="email" class="form-control" id="email">
+                      </div>
+                      <div class="form-group">
+                        <label for="password" class="col-form-label">password:</label>
+                        <input v-model="login.password" type="password" class="form-control" name="password" id="password">
+                      </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Login</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+        <!-- End Form Login -->
     </div>
 </template>
 
@@ -128,10 +161,37 @@
         },
         data() {
             return {
-                allCategories: {}
+                allCategories: {},
+                token: '',
+                login: {
+                    email: '',
+                    password: '',
+                },
+                register: {},
             }
         },
         methods: {
+            login() {
+                // this.$Progress.start()
+              //   axios({
+              //     method: 'post',
+              //     url: '/api/category/',
+              //     data: this.dataEditCategory,
+              //   }).then((response) => {
+              //     this.$Progress.finish()
+              //     $('#addNew').modal('hide');
+              //     Toast.fire({
+              //      icon: 'success',
+              //      title: 'Category has been Added.'
+              //    })
+
+              //     this.dataEditCategory = '';
+              //     this.getCategories()
+              // }).catch((error) => {
+              //     this.errors.record(error.response.data.errors)
+              //       this.$Progress.fail()
+              //   });
+            },
             countItemCart() {
                 var count = 0;
                 if(JSON.parse(localStorage.getItem("carts")) != null){
