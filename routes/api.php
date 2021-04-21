@@ -70,6 +70,7 @@ Route::get('categories/{id}', [CategoryController::class, 'show']); // for front
 
 // Page For USers
 Route::get('/home', [HomeController::class, 'index']);
+Route::get('/getAllBooks', [HomeController::class, 'getAllBooks']);
 
 // Page For USers
 Route::get('/getCategories', [HomeController::class, 'getCategories']);

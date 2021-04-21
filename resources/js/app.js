@@ -10,6 +10,15 @@ require('/js/carousel/owl.carousel.js');
 
 window.Vue = require('vue').default;
 
+
+
+import VueProgressBar from 'vue-progressbar'
+Vue.use(VueProgressBar, {
+  color: 'rgb(143, 255, 199)',
+  failedColor: 'red',
+  height: '5px'
+})
+
 // ES6 Modules or TypeScript
 import Swal from 'sweetalert2'
 window.Swal = Swal;

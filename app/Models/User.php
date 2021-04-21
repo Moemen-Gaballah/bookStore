@@ -50,6 +50,11 @@ class User extends Authenticatable
         return $this->hasMany(Comment::class);
     }
 
+    public function order()
+    {
+        return $this->hasMany(Order::class);
+    }
+
     // Accessors & Mutators
     // accessor
     public function getCreatedAtAttribute($date)

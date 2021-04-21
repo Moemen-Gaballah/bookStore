@@ -10,16 +10,7 @@
                   <div class="category collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ml-auto">
                       <li v-for="category in allCategories.data" class="nav-item">
-           <!--              <router-link :to="{ path: '/categories', params: {id: {category.id}} }"  class="nav-link">{{category.title}}</router-link> -->
-
-
-
-
-
-                        <!-- <router-link :to="{ path: 'categories', params: { userId: 123 }}">Home</router-link> -->
-
-                        
-                        <router-link :to="'/categories/'+category.id" :key="$route.path" class="nav-link">{{category.title}}</router-link>
+                        <router-link :to="'/categories/'+category.id" class="nav-link">{{category.title}}</router-link>
                       </li>
                     </ul>
                     <div class="login ml-0">

@@ -73,7 +73,14 @@
                                     </span>
 
                                 </div>
-                               <button class="btn checkout" data-toggle="modal" data-target="#checkout">
+                                <div v-if="!storeToken">
+                                    <div class="alert alert-danger" role="alert">
+                                      يجب تسجيل الدخول اولا لاستكمال الطلب.
+                                    </div>
+                                </div>
+
+
+                                <button onclick="canChangeAddress" v-else class="btn checkout" data-toggle="modal" data-target="#checkout">
                                     اتمام الطلب
                                     <i class="fas fa-chevron-left"></i>
                                 </button>
@@ -84,22 +91,22 @@
                                   <div class="modal-dialog" role="document">
                                     <div class="modal-content" style="direction: ltr;">
                                       <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                                        <h5 class="modal-title" id="exampleModalLabel">checkout</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                           <span aria-hidden="true">&times;</span>
                                         </button>
                                       </div>
                                       <div class="modal-body text-left">
-                                        <!-- <form>
+                                        <!-- <form> -->
                                           <div class="form-group">
-                                            <label for="recipient-name" class="col-form-label">Recipient:</label>
-                                            <input type="text" class="form-control" id="recipient-name">
+                                            <label for="address" class="col-form-label">Address:</label>
+                                            <input v-model="address" type="text" class="form-control" id="address">
                                           </div>
-                                          <div class="form-group">
+                                         <!--  <div class="form-group">
                                             <label for="message-text" class="col-form-label">Message:</label>
                                             <textarea class="form-control" id="message-text"></textarea>
-                                          </div>
-                                        </form> -->
+                                          </div> -->
+                                        <!-- </form> -->
 
                                         <div id="showPayForm">
 
@@ -108,7 +115,7 @@
                                       </div>
                                       <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button @click.prevent="getCheckoutId" type="button" class="btn btn-primary">Send message</button>
+                                        <button @click.prevent="getCheckoutId" type="button" class="btn btn-primary">confirm Order</button>
 
                                        <!--   <a href="/get-checkout-id/60" class="btn btn-primary">Send message</a> -->
 
@@ -331,38 +338,81 @@
           return {
             carts: {},
             token: null,
+            address: '',
             // totalcost:0,
             cartItems : {
             }
           }
         },
         methods: {
+            canChangeAddress(){
+                 $( "#address" ).prop( "disabled", false );
+            },
             getCheckoutId(){
-                axios({
-                    method: 'get',
-                    url: '/api/get-checkout-id/'+this.calcSum,
-                 }).then((response) => {
-                       console.log(response.data);
-                       $('#showPayForm').empty().html(response.data);
-                  }).catch((error) => {
-                     console.log(error);
-                    // this.errors.record(error.response.data.errors)
-                      // this.$Progress.fail()
-                  });
-                  console.log('finish get-checkout-id');
+                if(this.address.length == ''){
+                    this.$Progress.fail()
+                           Toast.fire({
+                            icon: 'error',
+                            title: 'you should add address.'
+                          })
+                }else if(this.address.length < 10){
+                     this.$Progress.fail()
+                           Toast.fire({
+                            icon: 'error',
+                            title: 'you should add min 10 character.'
+                          })
+                }else{
+                    $( "#address" ).prop( "disabled", true );
+                    axios({
+                        method: 'get',
+                        url: '/api/get-checkout-id/'+this.calcSum,
+                     }).then((response) => {
+                           console.log(response.data);
+                           $('#showPayForm').empty().html(response.data);
+                      }).catch((error) => {
+                         console.log(error);
+                        // this.errors.record(error.response.data.errors)
+                          // this.$Progress.fail()
+                      });
+                      console.log('finish get-checkout-id');
+                }
             },
             getStatusPayment() {
-               
+               this.$Progress.start()
                 axios({
                      method: 'get',
                      // url: '/api/get-checkout-status/'+window.location.pathname,
                      url: '/api/get-checkout-status'+window.location.search,
+                     // data: [
+                     //  'cart':this.cartItems,
+                     //  'adress':this.address,
+                     //  'token':this.$store.state.storeToken,
+                     //  'total': this.calcSum
+                     //  ],
                  }).then((response) => {
-                       console.log(response);
+                       console.log(response.data);
+                       if(response.data == true){
+                        this.$Progress.finish()
+                        Toast.fire({
+                         icon: 'success',
+                         title: 'تم الدفع بنجاح.'
+                       })
+                       }else{
+                        this.$Progress.fail()
+                           Toast.fire({
+                            icon: 'error',
+                            title: 'فشلت عملة الدفع'
+                          })
+                       }
+                       
                      
                   }).catch((error) => {
-
-                      // this.$Progress.fail()
+                        console.log(error);
+                      this.$Progress.fail()
+                           Toast.fire({
+                            icon: 'error',
+                            title: 'فشلت عملة الدفع'
+                          })
                   });
            
             },getCart() {
@@ -444,6 +494,9 @@
 
         },
         computed: {
+        storeToken() {
+            return this.$store.state.storeToken
+        },
          calcSum(){
           let total = 0;
           this.cartItems.forEach((item, i) => {

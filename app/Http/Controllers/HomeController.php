@@ -49,4 +49,25 @@ class HomeController extends Controller
         return response()->json(['data' =>$books, 'message' => 200]);
     }
 
+    public function getAllBooks()
+    {
+        // $books = Book::where('status', 1)->paginate('16');
+        // return response()->json(['data' =>$books, 'message' => 200]);
+
+    
+        if($search = \Request::get('q')){
+            if($search == 'lessPrice'){
+                $books = Book::where('status', 1)->orderBy('price', 'asc')->paginate('12');
+            }elseif($search == 'highPrice'){
+                $books = Book::where('status', 1)->orderBy('price', 'desc')->paginate('12');
+            }else{
+                $books = Book::where('status', 1)->latest()->paginate('12');
+            }
+        }else {
+            $books = Book::where('status', 1)->latest()->paginate('12');
+        }
+
+        return response()->json(['data' => $books, 'message' => 200]);
+    }
+
 }
