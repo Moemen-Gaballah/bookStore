@@ -22,7 +22,7 @@
                         <i class="fas fa-bars"></i>
                     </span>
                     <div class="dropdown-menu text-right dropdownSort" aria-labelledby="dropdownSortButton">
-                        <div class="form-check">
+                   <!--      <div class="form-check">
                           <input class="form-check-input" type="radio" name="sort" checked id="default" value="default">
                           <label class="form-check-label" for="default">
                             مقترحاتنا
@@ -39,7 +39,7 @@
                           <label class="form-check-label" for="highRate">
                               الاعلى تقيما
                           </label>
-                        </div>
+                        </div> -->
                         <div class="form-check">
                           <input class="form-check-input" @click="sortItem('highPrice')" type="radio" name="sort" id="maxPrice" value="maxPrice">
                           <label class="form-check-label" @click="sortItem('highPrice')" for="maxPrice">
@@ -341,6 +341,19 @@
                 .catch(() => {
 
                 })
-        }
-    }
+        },
+        // watch: {
+        //     // whenever question changes, this function will run
+        //     "$route.params.PostID": {
+        //         handler: function(value) {
+        //         console.log(value);
+        //     },
+        // },
+        watch: {
+                '$route' (to, from) {
+                    this.sortItem();
+                    
+                },
+              },
+}
 </script>

@@ -135,7 +135,7 @@
 
     .owl-carousel-products .card{
         height: 400px;
-        width: 100%;
+        /*width: 100%;*/
         margin: 2px;
         overflow: hidden;
         border: 0;

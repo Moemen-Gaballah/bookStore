@@ -73,56 +73,51 @@
                                     </span>
 
                                 </div>
-                               <button class="btn checkout" data-toggle="modal" data-target="#checkout">
+                                <button class="btn checkout" data-toggle="modal" data-target="#checkout">
                                     اتمام الطلب
                                     <i class="fas fa-chevron-left"></i>
                                 </button>
 
                                  <!-- Start Model Section to add address -->
 
-                                <div class="modal fade" id="checkout" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                  <div class="modal-dialog" role="document">
-                                    <div class="modal-content" style="direction: ltr;">
-                                      <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                          <span aria-hidden="true">&times;</span>
-                                        </button>
-                                      </div>
-                                      <div class="modal-body text-left">
-                                        <!-- <form>
-                                          <div class="form-group">
-                                            <label for="recipient-name" class="col-form-label">Recipient:</label>
-                                            <input type="text" class="form-control" id="recipient-name">
-                                          </div>
-                                          <div class="form-group">
-                                            <label for="message-text" class="col-form-label">Message:</label>
-                                            <textarea class="form-control" id="message-text"></textarea>
-                                          </div>
-                                        </form> -->
-
-                                        <div id="showPayForm">
-
-                                        </div>
-
-                                      </div>
-                                      <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button @click.prevent="getCheckoutId" type="button" class="btn btn-primary">Send message</button>
-
-                                       <!--   <a href="/get-checkout-id/60" class="btn btn-primary">Send message</a> -->
-
-
-                                      </div>
-                                    </div>
+                        <div class="modal fade" id="checkout" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                <form>
+                                  <div class="form-group">
+                                    <label for="recipient-name" class="col-form-label">Recipient:</label>
+                                    <input type="text" class="form-control" id="recipient-name">
                                   </div>
-                                </div>
+                                  <div class="form-group">
+                                    <label for="message-text" class="col-form-label">Message:</label>
+                                    <textarea class="form-control" id="message-text"></textarea>
+                                  </div>
+                                </form>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Send message</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
 
                         <!-- End Model Section to add address -->
+
+
+
+
                             </div>
                         </div> <!-- end div box -->
 
-
+                        <!-- Start section Empty Cart -->
 
                         <div v-else class="cartEmpty text-center">
                             <i class="fas fa-heart-broken"></i>
@@ -132,6 +127,11 @@
                                 <i class="fas fa-angle-right"></i>
                             </router-link>
                         </div>
+
+                        <!-- End section empty Cart -->
+
+
+
                     </div>
                 </div>
             </div> <!-- End div row -->
@@ -337,35 +337,7 @@
           }
         },
         methods: {
-            getCheckoutId(){
-                axios({
-                    method: 'get',
-                    url: '/api/get-checkout-id/'+this.calcSum,
-                 }).then((response) => {
-                       console.log(response.data);
-                       $('#showPayForm').empty().html(response.data);
-                  }).catch((error) => {
-                     console.log(error);
-                    // this.errors.record(error.response.data.errors)
-                      // this.$Progress.fail()
-                  });
-                  console.log('finish get-checkout-id');
-            },
-            getStatusPayment() {
-               
-                axios({
-                     method: 'get',
-                     // url: '/api/get-checkout-status/'+window.location.pathname,
-                     url: '/api/get-checkout-status'+window.location.search,
-                 }).then((response) => {
-                       console.log(response);
-                     
-                  }).catch((error) => {
-
-                      // this.$Progress.fail()
-                  });
-           
-            },getCart() {
+            getCart() {
                 if(JSON.parse(localStorage.getItem("carts")) != null){
 
                     JSON.parse(localStorage.getItem("carts")).forEach((item,index) =>{
@@ -395,6 +367,8 @@
             },
             addToCart(id, count){
                 var carts = [];
+                // var count = 0;
+                // var countForId = 0;
                 if(JSON.parse(localStorage.getItem("carts")) != null){
                     JSON.parse(localStorage.getItem("carts")).forEach((item,index) =>{
                        if(item !=' ' &&  item!=null){
@@ -402,6 +376,11 @@
                           }
                        })
 
+                //     if(typeof JSON.parse(localStorage.getItem("carts"))[id] !== 'undefined'){
+                //         countForId = JSON.parse(localStorage.getItem("carts"))[id] +1;
+                //     }else{
+                //         countForId = 1;
+                //     }
                 }else {
                     count = 1;
                 }
@@ -414,6 +393,7 @@
             },
 
             increaseItem (book, index) {
+                console.log(index)
                 this.cartItems[index].count +=1
                 this.addToCart(book.id, this.cartItems[index].count)
             },
@@ -440,7 +420,6 @@
             totlePriceOneProduct(price, count){
                 return (price * count).toFixed(2);
             },
-            
 
         },
         computed: {
@@ -455,7 +434,6 @@
         },
         created() {
             this.getCart();
-            this.getStatusPayment();
         }
     }
 </script>

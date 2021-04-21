@@ -3279,16 +3279,16 @@ Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_2__.default);
 Vue.component('pagination', __webpack_require__(/*! laravel-vue-pagination */ "./node_modules/laravel-vue-pagination/dist/laravel-vue-pagination.common.js"));
 var routes = [// { path: '/dashboard', component: require('../components/Dashboard.vue').default },
 {
-  path: '/users',
+  path: '/dashboard/users',
   component: __webpack_require__(/*! ../components/Users.vue */ "./resources/backend/components/Users.vue").default
 }, {
-  path: '/categories',
+  path: '/dashboard/categories',
   component: __webpack_require__(/*! ../components/Categories.vue */ "./resources/backend/components/Categories.vue").default
 }, {
-  path: '/books',
+  path: '/dashboard/books',
   component: __webpack_require__(/*! ../components/Books.vue */ "./resources/backend/components/Books.vue").default
 }, {
-  path: '/comments',
+  path: '/dashboard/comments',
   component: __webpack_require__(/*! ../components/Comments.vue */ "./resources/backend/components/Comments.vue").default
 } // ,
 // { path: '/invoice', component: require('./components/Invoice.vue').default },

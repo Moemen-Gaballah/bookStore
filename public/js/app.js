@@ -2170,6 +2170,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 //
 //
 //
@@ -2324,42 +2330,180 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+// class Error To Show errors
+var Errors = /*#__PURE__*/function () {
+  function Errors() {
+    _classCallCheck(this, Errors);
+
+    this.errors = {};
+  }
+
+  _createClass(Errors, [{
+    key: "has",
+    value: function has(field) {
+      return this.errors.hasOwnProperty(field);
+    }
+  }, {
+    key: "any",
+    value: function any(field) {
+      return object.key(this.errors).length > 0;
+    }
+  }, {
+    key: "get",
+    value: function get(field) {
+      if (this.errors[field]) {
+        return this.errors[field][0];
+      }
+    }
+  }, {
+    key: "record",
+    value: function record(errors) {
+      this.errors = errors;
+    }
+  }, {
+    key: "clear",
+    value: function clear(field) {
+      delete this.errors[field];
+    }
+  }]);
+
+  return Errors;
+}();
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   computed: {
     counter: function counter() {
       return this.$store.state.counter;
+    },
+    storeToken: function storeToken() {
+      return this.$store.state.storeToken;
     }
   },
   data: function data() {
     return {
+      errors: new Errors(),
       allCategories: {},
+      emailOrPasswordWrong: false,
       token: '',
-      login: {
+      login: true,
+      user: {
+        name: '',
         email: '',
-        password: ''
-      },
-      register: {}
+        password: '',
+        password_confirmation: ''
+      } // register: {},
+
     };
   },
   methods: {
-    login: function login() {// this.$Progress.start()
-      //   axios({
-      //     method: 'post',
-      //     url: '/api/category/',
-      //     data: this.dataEditCategory,
-      //   }).then((response) => {
-      //     this.$Progress.finish()
-      //     $('#addNew').modal('hide');
-      //     Toast.fire({
-      //      icon: 'success',
-      //      title: 'Category has been Added.'
-      //    })
-      //     this.dataEditCategory = '';
-      //     this.getCategories()
-      // }).catch((error) => {
-      //     this.errors.record(error.response.data.errors)
-      //       this.$Progress.fail()
-      //   });
+    changeLogin: function changeLogin() {
+      if (this.login == true) {
+        console.log(this.login);
+        this.login = false;
+      } else {
+        this.login = true;
+      }
+    },
+    authentication: function authentication() {
+      var _this = this;
+
+      // this.$Progress.start()
+      var url = "/api/login/";
+      if (this.login != true) url = "/api/register/";
+      axios({
+        method: 'post',
+        url: url,
+        data: this.user
+      }).then(function (response) {
+        _this.emailOrPasswordWrong = false;
+        localStorage.setItem("storeToken", response.data.token);
+        _this.$store.state.storeToken = response.data.token;
+        _this.token = response.data.token; // this.$Progress.finish()
+
+        $('#authentication').modal('hide');
+        Toast.fire({
+          icon: 'success',
+          title: 'Login Successful.'
+        });
+        _this.user = {}; // this.getCategories()   
+      })["catch"](function (error) {
+        if (error.response.data.message == "Password mismatch") {
+          _this.emailOrPasswordWrong = true;
+        } else if (error.response.data.message == "User does not exist") {
+          _this.emailOrPasswordWrong = true;
+        } else {
+          _this.errors.record(error.response.data.errors);
+        } // this.$Progress.fail()
+
+      });
+    },
+    logout: function logout() {
+      var _this2 = this;
+
+      // this.$Progress.start()
+      axios({
+        method: 'post',
+        url: '/api/logout',
+        headers: {
+          'Authorization': "Bearer ".concat(this.$store.state.storeToken)
+        }
+      }).then(function (response) {
+        localStorage.removeItem('storeToken');
+        _this2.$store.state.storeToken = '';
+        $('#authentication').modal('hide');
+        Toast.fire({
+          icon: 'success',
+          title: 'Logout Successfully.'
+        }); // this.getCategories()   
+      })["catch"](function (error) {
+        _this2.errors.record(error.response.data.errors); // this.$Progress.fail()
+
+      });
     },
     countItemCart: function countItemCart() {
       var count = 0;
@@ -2375,17 +2519,24 @@ __webpack_require__.r(__webpack_exports__);
       this.$store.state.counter = count;
     },
     getCategories: function getCategories() {
-      var _this = this;
+      var _this3 = this;
 
       axios.get('/api/getCategories/').then(function (data) {
-        _this.allCategories = data.data;
+        _this3.allCategories = data.data;
         console.log(data.data);
       })["catch"](function () {});
     }
   },
   created: function created() {
     this.countItemCart();
-    this.getCategories();
+    this.getCategories(this.$store.state.storeToken);
+
+    if ("storeToken" in localStorage) {
+      this.$store.state.storeToken = localStorage.getItem("storeToken");
+    } else {
+      this.$store.state.storeToken = '';
+    } // alert(this.$store.state.storeToken);    
+
   }
 });
 
@@ -3767,16 +3918,114 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
       carts: {},
       token: null,
-      totalcost: 0,
+      // totalcost:0,
       cartItems: {}
     };
   },
   methods: {
+    getCheckoutId: function getCheckoutId() {
+      axios({
+        method: 'get',
+        url: '/api/get-checkout-id/' + this.calcSum
+      }).then(function (response) {
+        console.log(response.data);
+        $('#showPayForm').empty().html(response.data);
+      })["catch"](function (error) {
+        console.log(error); // this.errors.record(error.response.data.errors)
+        // this.$Progress.fail()
+      });
+      console.log('finish get-checkout-id');
+    },
+    getStatusPayment: function getStatusPayment() {
+      axios({
+        method: 'get',
+        // url: '/api/get-checkout-status/'+window.location.pathname,
+        url: '/api/get-checkout-status' + window.location.search
+      }).then(function (response) {
+        console.log(response);
+      })["catch"](function (error) {// this.$Progress.fail()
+      });
+    },
     getCart: function getCart() {
       var _this = this;
 
@@ -3805,13 +4054,34 @@ __webpack_require__.r(__webpack_exports__);
 
       console.log('lengthobject' + Object.keys(this.cartItems).length);
     },
-    increaseItem: function increaseItem(index) {
-      console.log(index);
-      this.cartItems[index].count += 1;
+    addToCart: function addToCart(id, count) {
+      var carts = [];
+
+      if (JSON.parse(localStorage.getItem("carts")) != null) {
+        JSON.parse(localStorage.getItem("carts")).forEach(function (item, index) {
+          if (item != ' ' && item != null) {
+            carts[index] = item;
+          }
+        });
+      } else {
+        count = 1;
+      }
+
+      if (count != 0) {
+        carts[id] = count;
+      }
+
+      carts[id] = count;
+      localStorage.setItem("carts", JSON.stringify(carts)); // this.countItemCart();
     },
-    decreaseItem: function decreaseItem(index) {
+    increaseItem: function increaseItem(book, index) {
+      this.cartItems[index].count += 1;
+      this.addToCart(book.id, this.cartItems[index].count);
+    },
+    decreaseItem: function decreaseItem(book, index) {
       if (this.cartItems[index].count > 0) {
         this.cartItems[index].count -= 1;
+        this.addToCart(book.id, this.cartItems[index].count);
       }
     },
     deleteItem: function deleteItem(book, index) {
@@ -3823,14 +4093,26 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
       localStorage.setItem("carts", JSON.stringify(carts));
-      this.getCart(); // this.cartItems.splice(item.id, 1);
-      // console.log(this.cartItems[index] ;
-
-      this.$delete(this.cartItems, index); // this.cartItems[id].count +=1
+      this.$delete(this.carts, book.id);
+      this.$delete(this.cartItems, index);
+      this.getCart();
+    },
+    totlePriceOneProduct: function totlePriceOneProduct(price, count) {
+      return (price * count).toFixed(2);
+    }
+  },
+  computed: {
+    calcSum: function calcSum() {
+      var total = 0;
+      this.cartItems.forEach(function (item, i) {
+        total += item.price * item.count;
+      });
+      return total.toFixed(2);
     }
   },
   created: function created() {
     this.getCart();
+    this.getStatusPayment();
   }
 });
 
@@ -4183,6 +4465,18 @@ __webpack_require__.r(__webpack_exports__);
       _this2.books = data.data.data;
       _this2.categoryName = data.data.categoryName;
     })["catch"](function () {});
+  },
+  // watch: {
+  //     // whenever question changes, this function will run
+  //     "$route.params.PostID": {
+  //         handler: function(value) {
+  //         console.log(value);
+  //     },
+  // },
+  watch: {
+    '$route': function $route(to, from) {
+      this.sortItem();
+    }
   }
 });
 
@@ -7641,7 +7935,9 @@ __webpack_require__.r(__webpack_exports__);
 vue__WEBPACK_IMPORTED_MODULE_0__.default.use(vuex__WEBPACK_IMPORTED_MODULE_1__.default);
 var store = new vuex__WEBPACK_IMPORTED_MODULE_1__.default.Store({
   state: {
-    counter: 0
+    counter: 0,
+    storeToken: '' // storeToken: localStorage.getItem("token") ? localStorage.getItem("token") : '',
+
   }
 });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (store);
@@ -12202,7 +12498,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.sliderProducts {\n    /* height: 400px; */\n    /* background-color: #DDD; */\n    margin: 40px auto;\n}\n.owl-nav {\n    position: absolute;\n    top: -35px;\n    background-color: #00897d;\n    color:#FFF;\n    overflow: hidden;\n}\n.owl-nav div{\n    padding: 0 !important;\n    background-color: #00897d !important;\n    color:#FFF !important;\n    font-size: 35px !important;\n    height: 44px;\n    border-radius: 50%;\n}\n.owl-carousel-products {\n    padding: 15px;\n    text-align: right;\n    width: 100%;\n    margin: 10px 2px 5px;\n    overflow: hidden;\n    border-radius: 5px;\n    /* box-shadow: 0 0 8px rgba(0,0,0,0.3) */\n}\n.sliderProducts .books {\n    padding: 15px;\n    text-align: right;\n    width: 100%;\n    margin: 30px 2px 5px;\n    overflow: hidden;\n    border-radius: 5px;\n    box-shadow: 0 0 8px rgba(0,0,0,0.3)\n}\n.sliderProducts .books .bar{\n    margin: 20px 0 0px;\n}\n.sliderProducts .books .bar span {\n        background-color: #00897D;\n        padding: 10px;\n        font-size: 22px;\n        margin: -10px -15px 10px;\n        border: 1px solid #00897D;\n        border-radius: 10px 0 0 10px;\n        color: #FFF;\n        font-weight: bold;\n}\n.sliderProducts .books .bar span:last-of-type{\n    float: left;\n    direction: ltr;\n    font-size: 15px;\n    color: #e2e2e2;\n    border: 1px solid #00897D;\n    border-radius: 50%;\n    margin: -8px 0px;\n}\n.sliderProducts .books .bar .dropdownSort {\npadding: 10px;\n}\n.sliderProducts .books .bar label{\nmargin-right: 22px;\nfont-weight: 600;\ncolor: #7b7b7be6;\ncursor: pointer;\nwidth: 100%;\n}\n.owl-carousel-products .card{\n    height: 400px;\n    width: 100%;\n    margin: 2px;\n    overflow: hidden;\n    border: 0;\n    padding: 15px;\n    box-shadow: 0 0 1px rgb(0 0 0 / 0%), 0 1px 3px rgb(0 0 0 / 0%);\n}\n.owl-carousel-products .card a{\n    text-decoration: none;\n}\n.owl-carousel-products .card:hover{\n    box-shadow: 0 5px 15px rgba(0,0,0,0.3);\n    /* transition: all .5 ease-in-out; */\n    transition: box-shadow .5s;\n}\n.owl-carousel-products .card img{\n    height: 280px;\n    width: 200px;\n    margin: auto;\n    display: block;\n}\n.owl-carousel-products .card .card-body{\n    padding: 18px 0 0 0;\n}\n.owl-carousel-products .card .card-title{\n    float: right;\n    color: #4c4c4c;\n    font-size: 20px;\n    margin-bottom: 0;\n}\n.owl-carousel-products .card .card-text{\n    color: #8a8a8a;\n    font-size: 16px;\n}\n.owl-carousel-products .card a, .btnAddToCart{\n    color: #8a8a8a;\n}\n.owl-carousel-products .card a:hover, .btnAddToCart:hover{\n    color: #00A99D;\n}\n.owl-carousel-products .card i{\n    position: absolute;\n    bottom: 10px;\n    left: 10px;\n}\n.owl-carousel-products .card .price{\n    color: #00A99D;\n    font-size: 17px;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.sliderProducts {\n    /* height: 400px; */\n    /* background-color: #DDD; */\n    margin: 40px auto;\n}\n.owl-nav {\n    position: absolute;\n    top: -35px;\n    background-color: #00897d;\n    color:#FFF;\n    overflow: hidden;\n}\n.owl-nav div{\n    padding: 0 !important;\n    background-color: #00897d !important;\n    color:#FFF !important;\n    font-size: 35px !important;\n    height: 44px;\n    border-radius: 50%;\n}\n.owl-carousel-products {\n    padding: 15px;\n    text-align: right;\n    width: 100%;\n    margin: 10px 2px 5px;\n    overflow: hidden;\n    border-radius: 5px;\n    /* box-shadow: 0 0 8px rgba(0,0,0,0.3) */\n}\n.sliderProducts .books {\n    padding: 15px;\n    text-align: right;\n    width: 100%;\n    margin: 30px 2px 5px;\n    overflow: hidden;\n    border-radius: 5px;\n    box-shadow: 0 0 8px rgba(0,0,0,0.3)\n}\n.sliderProducts .books .bar{\n    margin: 20px 0 0px;\n}\n.sliderProducts .books .bar span {\n        background-color: #00897D;\n        padding: 10px;\n        font-size: 22px;\n        margin: -10px -15px 10px;\n        border: 1px solid #00897D;\n        border-radius: 10px 0 0 10px;\n        color: #FFF;\n        font-weight: bold;\n}\n.sliderProducts .books .bar span:last-of-type{\n    float: left;\n    direction: ltr;\n    font-size: 15px;\n    color: #e2e2e2;\n    border: 1px solid #00897D;\n    border-radius: 50%;\n    margin: -8px 0px;\n}\n.sliderProducts .books .bar .dropdownSort {\npadding: 10px;\n}\n.sliderProducts .books .bar label{\nmargin-right: 22px;\nfont-weight: 600;\ncolor: #7b7b7be6;\ncursor: pointer;\nwidth: 100%;\n}\n.owl-carousel-products .card{\n    height: 400px;\n    /*width: 100%;*/\n    margin: 2px;\n    overflow: hidden;\n    border: 0;\n    padding: 15px;\n    box-shadow: 0 0 1px rgb(0 0 0 / 0%), 0 1px 3px rgb(0 0 0 / 0%);\n}\n.owl-carousel-products .card a{\n    text-decoration: none;\n}\n.owl-carousel-products .card:hover{\n    box-shadow: 0 5px 15px rgba(0,0,0,0.3);\n    /* transition: all .5 ease-in-out; */\n    transition: box-shadow .5s;\n}\n.owl-carousel-products .card img{\n    height: 280px;\n    width: 200px;\n    margin: auto;\n    display: block;\n}\n.owl-carousel-products .card .card-body{\n    padding: 18px 0 0 0;\n}\n.owl-carousel-products .card .card-title{\n    float: right;\n    color: #4c4c4c;\n    font-size: 20px;\n    margin-bottom: 0;\n}\n.owl-carousel-products .card .card-text{\n    color: #8a8a8a;\n    font-size: 16px;\n}\n.owl-carousel-products .card a, .btnAddToCart{\n    color: #8a8a8a;\n}\n.owl-carousel-products .card a:hover, .btnAddToCart:hover{\n    color: #00A99D;\n}\n.owl-carousel-products .card i{\n    position: absolute;\n    bottom: 10px;\n    left: 10px;\n}\n.owl-carousel-products .card .price{\n    color: #00A99D;\n    font-size: 17px;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -12275,7 +12571,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.cart[data-v-53fce717] {\n    direction: rtl;\n    text-align: right;\n    margin-top: 15px;\n}\n.cart .path[data-v-53fce717] {\n    color: #8c8c8c;\n    font-size: 16px;\n}\n.cart .path a[data-v-53fce717]{\n    direction: rtl;\n    text-align: right;\n    font-size: 17px;\n    color: #8c8c8c;\n    text-decoration: none;\n}\n/* end style path */\n.cart .makeHr[data-v-53fce717] {\n    max-width: 80%;\n    margin: auto;\n    text-align: center;\n}\n.cart .makeHr hr[data-v-53fce717]{\n    background-color: #00A99D;\n    height: 1px;\n    display: inline-block;\n    width: 74%;\n    padding: 0;\n    margin: 0;\n}\n.cart .makeHr .tickMark[data-v-53fce717] {\n    background-color: #00A99D;\n    padding: 6px;\n    color: #FFF;\n    border-radius: 50%;\n    font-size: 16px;\n}\n.cart .makeHr .second[data-v-53fce717] {\n    border: 2px solid #00A99D;\n    padding: 6px;\n    color: #00A99D;\n    border-radius: 50%;\n    font-size: 17px;\n    margin-right: -4px;\n}\n.cart .content .content[data-v-53fce717] {\n    width: 80%;\n}\n.cart .content .box[data-v-53fce717] {\n    border: 1px solid #DDD;\n    padding: 0 10px 10px 10px;\n    width: 60%;\n    margin: auto;\n}\n.cart .content .box .remove i[data-v-53fce717] {\n    float: left;\n    font-size: 25px;\n    cursor: pointer;\n    margin: 10px 4px;\n}\n.cart .content .box img[data-v-53fce717]{\n    width: 60px;\n    height: 80px;\n    vertical-align: top;\n    margin: 10px 10px 10px 20px;\n}\n.cart .content .box .description[data-v-53fce717] {\n    display: inline-block;\n}\n.cart .content .box .title[data-v-53fce717] {\n    margin: 10px 0 0 0;\n    color: #a2a2a2;\n}\n.cart .content .box .price[data-v-53fce717] {\n    color: #00A99D;\n    font-size: 17px;\n    margin-bottom: 0;\n    font-weight: bold;\n}\n.cart .content .box .quantity p[data-v-53fce717] {\n    display: inline-block;\n    margin-right: 5px;\n    float: right;\n    line-height: 2;\n}\n.cart .content .box .quantity > span[data-v-53fce717] {\n    border: 1px solid #d0d0d0;\n    text-align: center;\n    font-size: 20px;\n    font-weight: bold;\n    color: #696969;\n    display: inline-block;\n    margin-left: 0;\n}\n.cart .content .box .quantity .plus[data-v-53fce717], .cart .content .box .quantity .minus[data-v-53fce717]{\n    width: 40px;\n    cursor: pointer;\n}\n.cart .content .box .quantity .count[data-v-53fce717]{\n    width: 200px;\n}\n.cart .completeOrder[data-v-53fce717]{\n    border: 1px solid #DDD;\n    width: 60%;\n    margin: auto;\n    font-size: 18px;\n    padding: 5px;\n}\n.cartEmpty[data-v-53fce717] {\n    color: #E1E1E1;\n    margin-top: 60px;\n}\n.cartEmpty i[data-v-53fce717]{\n    font-size: 100px;\n}\n.cartEmpty .emptyText[data-v-53fce717]{\n    font-size: 20px;\n    color: #999 !important;\n}\n.cartEmpty .backToStore[data-v-53fce717]{\n    background-color: #00897D;\n    color: #fff;\n    padding: 10px 15px;\n    width: 300px;\n    display: inline-block;\n    font-size: 18px;\n    border-radius: 8px;\n    font-family: inherit !important;\n    text-decoration: none;\n}\n.cartEmpty .backToStore i[data-v-53fce717]{\n    font-size: 22px;\n    float: right;\n    line-height: 1.3;\n}\n\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n.cart[data-v-53fce717] {\n    direction: rtl;\n    text-align: right;\n    margin-top: 15px;\n}\n.cart .path[data-v-53fce717] {\n    color: #8c8c8c;\n    font-size: 16px;\n}\n.cart .path a[data-v-53fce717]{\n    direction: rtl;\n    text-align: right;\n    font-size: 17px;\n    color: #8c8c8c;\n    text-decoration: none;\n}\n/* end style path */\n.cart .makeHr[data-v-53fce717] {\n    max-width: 80%;\n    margin: auto;\n    text-align: center;\n}\n.cart .makeHr hr[data-v-53fce717]{\n    background-color: #00A99D;\n    height: 1px;\n    display: inline-block;\n    width: 74%;\n    padding: 0;\n    margin: 0;\n}\n.cart .makeHr .tickMark[data-v-53fce717] {\n    background-color: #00A99D;\n    padding: 6px;\n    color: #FFF;\n    border-radius: 50%;\n    font-size: 16px;\n}\n.cart .makeHr .second[data-v-53fce717] {\n    border: 2px solid #00A99D;\n    padding: 6px;\n    color: #00A99D;\n    border-radius: 50%;\n    font-size: 17px;\n    margin-right: -4px;\n}\n.cart .content .content[data-v-53fce717] {\n    width: 80%;\n}\n.cart .content .box[data-v-53fce717] {\n    border: 1px solid #DDD;\n    padding: 0 10px 10px 10px;\n    width: 60%;\n    margin: auto;\n}\n.cart .content .box .remove i[data-v-53fce717] {\n    float: left;\n    font-size: 25px;\n    cursor: pointer;\n    margin: 10px 4px;\n}\n.cart .content .box img[data-v-53fce717]{\n    width: 60px;\n    height: 80px;\n    vertical-align: top;\n    margin: 10px 10px 10px 20px;\n}\n.cart .content .box .description[data-v-53fce717] {\n    display: inline-block;\n}\n.cart .content .box .title[data-v-53fce717] {\n    margin: 10px 0 0 0;\n    color: #a2a2a2;\n}\n.cart .content .box .price[data-v-53fce717] {\n    color: #00A99D;\n    font-size: 17px;\n    margin-bottom: 0;\n    font-weight: bold;\n}\n.cart .content .box .quantity p[data-v-53fce717] {\n    display: inline-block;\n    margin-right: 5px;\n    float: right;\n    line-height: 2;\n}\n.cart .content .box .quantity > span[data-v-53fce717] {\n    border: 1px solid #d0d0d0;\n    text-align: center;\n    font-size: 20px;\n    font-weight: bold;\n    color: #696969;\n    display: inline-block;\n    margin-left: 0;\n}\n.cart .content .box .quantity .plus[data-v-53fce717], .cart .content .box .quantity .minus[data-v-53fce717]{\n    width: 40px;\n    cursor: pointer;\n}\n.cart .content .box .quantity .count[data-v-53fce717]{\n    width: 200px;\n}\n.cart .completeOrder[data-v-53fce717]{\n    width: 60%;\n    margin: auto;\n    font-size: 18px;\n    padding: 5px;\n}\n.cart .completeOrder .calc[data-v-53fce717]{\n    border: 1px solid #DDD;\n    padding: 10px;\n    font-size: 17px;\n    color: #5a5a5a\n}\n.cart .completeOrder .checkout[data-v-53fce717] {\n    background-color: #00A99D;\n    color: #fff;\n    float: left;\n    margin-top: 20px;\n}\n\n\n/* section cart empty*/\n.cartEmpty[data-v-53fce717] {\n    color: #E1E1E1;\n    margin-top: 60px;\n}\n.cartEmpty i[data-v-53fce717]{\n    font-size: 100px;\n}\n.cartEmpty .emptyText[data-v-53fce717]{\n    font-size: 20px;\n    color: #999 !important;\n}\n.cartEmpty .backToStore[data-v-53fce717]{\n    background-color: #00897D;\n    color: #fff;\n    padding: 10px 15px;\n    width: 300px;\n    display: inline-block;\n    font-size: 18px;\n    border-radius: 8px;\n    font-family: inherit !important;\n    text-decoration: none;\n}\n.cartEmpty .backToStore i[data-v-53fce717]{\n    font-size: 22px;\n    float: right;\n    line-height: 1.3;\n}\n\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -48951,6 +49247,7 @@ var render = function() {
                       _c(
                         "router-link",
                         {
+                          key: _vm.$route.path,
                           staticClass: "nav-link",
                           attrs: { to: "/categories/" + category.id }
                         },
@@ -48967,9 +49264,29 @@ var render = function() {
                 _c("ul", { staticClass: "list-inline icons" }, [
                   _vm._m(1),
                   _vm._v(" "),
-                  _vm._m(2),
+                  _vm.storeToken.length < 1
+                    ? _c(
+                        "li",
+                        {
+                          staticClass: "list-inline-item mr-1",
+                          attrs: {
+                            type: "button",
+                            "data-toggle": "modal",
+                            "data-target": "#authentication"
+                          }
+                        },
+                        [_vm._m(2)]
+                      )
+                    : _c(
+                        "li",
+                        {
+                          staticClass: "list-inline-item mr-1",
+                          on: { click: _vm.logout }
+                        },
+                        [_vm._m(3)]
+                      ),
                   _vm._v(" "),
-                  _vm._m(3),
+                  _vm._m(4),
                   _vm._v(" "),
                   _c(
                     "li",
@@ -49004,7 +49321,7 @@ var render = function() {
         staticClass: "modal fade",
         staticStyle: { direction: "ltr", color: "#6d6a6a" },
         attrs: {
-          id: "exampleModal",
+          id: "authentication",
           tabindex: "-1",
           role: "dialog",
           "aria-labelledby": "exampleModalLabel",
@@ -49017,10 +49334,97 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(4),
+              _c("div", { staticClass: "modal-header" }, [
+                _vm.login
+                  ? _c(
+                      "h5",
+                      {
+                        staticClass: "modal-title",
+                        attrs: { id: "exampleModalLabel" }
+                      },
+                      [_vm._v("Login")]
+                    )
+                  : _c(
+                      "h5",
+                      {
+                        staticClass: "modal-title",
+                        attrs: { id: "exampleModalLabel" }
+                      },
+                      [_vm._v("Register")]
+                    ),
+                _vm._v(" "),
+                _vm._m(5)
+              ]),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _c("form", [
+                  !_vm.login
+                    ? _c("div", { staticClass: "form-group" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass: "col-form-label",
+                            attrs: { for: "name" }
+                          },
+                          [_vm._v("name:")]
+                        ),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.user.name,
+                              expression: "user.name"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: _vm.errors.has("name")
+                            ? "border border-danger"
+                            : "",
+                          attrs: { type: "text", id: "name" },
+                          domProps: { value: _vm.user.name },
+                          on: {
+                            keydown: function($event) {
+                              return _vm.errors.clear("name")
+                            },
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.user, "name", $event.target.value)
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _vm.errors.has("name")
+                          ? _c("span", {
+                              staticClass: "help text-danger",
+                              domProps: {
+                                textContent: _vm._s(_vm.errors.get("name"))
+                              }
+                            })
+                          : _vm._e()
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.emailOrPasswordWrong
+                    ? _c("div", { staticClass: "form-group" }, [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "alert alert-danger",
+                            attrs: { role: "alert" }
+                          },
+                          [
+                            _vm._v(
+                              "\n                           Something wrong email or password!\n                        "
+                            )
+                          ]
+                        )
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
                   _c("div", { staticClass: "form-group" }, [
                     _c(
                       "label",
@@ -49036,22 +49440,37 @@ var render = function() {
                         {
                           name: "model",
                           rawName: "v-model",
-                          value: _vm.login.email,
-                          expression: "login.email"
+                          value: _vm.user.email,
+                          expression: "user.email"
                         }
                       ],
                       staticClass: "form-control",
+                      class: _vm.errors.has("email")
+                        ? "border border-danger"
+                        : "",
                       attrs: { type: "email", id: "email" },
-                      domProps: { value: _vm.login.email },
+                      domProps: { value: _vm.user.email },
                       on: {
+                        keydown: function($event) {
+                          return _vm.errors.clear("email")
+                        },
                         input: function($event) {
                           if ($event.target.composing) {
                             return
                           }
-                          _vm.$set(_vm.login, "email", $event.target.value)
+                          _vm.$set(_vm.user, "email", $event.target.value)
                         }
                       }
-                    })
+                    }),
+                    _vm._v(" "),
+                    _vm.errors.has("email")
+                      ? _c("span", {
+                          staticClass: "help text-danger",
+                          domProps: {
+                            textContent: _vm._s(_vm.errors.get("email"))
+                          }
+                        })
+                      : _vm._e()
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "form-group" }, [
@@ -49069,31 +49488,183 @@ var render = function() {
                         {
                           name: "model",
                           rawName: "v-model",
-                          value: _vm.login.password,
-                          expression: "login.password"
+                          value: _vm.user.password,
+                          expression: "user.password"
                         }
                       ],
                       staticClass: "form-control",
+                      class: _vm.errors.has("password")
+                        ? "border border-danger"
+                        : "",
                       attrs: {
                         type: "password",
                         name: "password",
                         id: "password"
                       },
-                      domProps: { value: _vm.login.password },
+                      domProps: { value: _vm.user.password },
                       on: {
+                        keydown: function($event) {
+                          return _vm.errors.clear("password")
+                        },
                         input: function($event) {
                           if ($event.target.composing) {
                             return
                           }
-                          _vm.$set(_vm.login, "password", $event.target.value)
+                          _vm.$set(_vm.user, "password", $event.target.value)
                         }
                       }
-                    })
-                  ])
+                    }),
+                    _vm._v(" "),
+                    _vm.errors.has("password")
+                      ? _c("span", {
+                          staticClass: "help text-danger",
+                          domProps: {
+                            textContent: _vm._s(_vm.errors.get("password"))
+                          }
+                        })
+                      : _vm._e()
+                  ]),
+                  _vm._v(" "),
+                  !_vm.login
+                    ? _c("div", { staticClass: "form-group" }, [
+                        _c(
+                          "label",
+                          {
+                            staticClass: "col-form-label",
+                            attrs: { for: "password_confirmation" }
+                          },
+                          [_vm._v("confirm password:")]
+                        ),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.user.password_confirmation,
+                              expression: "user.password_confirmation"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: _vm.errors.has("password_confirmation")
+                            ? "border border-danger"
+                            : "",
+                          attrs: {
+                            type: "password",
+                            name: "password_confirmation",
+                            id: "password_confirmation"
+                          },
+                          domProps: { value: _vm.user.password_confirmation },
+                          on: {
+                            keydown: function($event) {
+                              return _vm.errors.clear("password_confirmation")
+                            },
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.user,
+                                "password_confirmation",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _vm.errors.has("password_confirmation")
+                          ? _c("span", {
+                              staticClass: "help text-danger",
+                              domProps: {
+                                textContent: _vm._s(
+                                  _vm.errors.get("password_confirmation")
+                                )
+                              }
+                            })
+                          : _vm._e()
+                      ])
+                    : _vm._e()
                 ])
               ]),
               _vm._v(" "),
-              _vm._m(5)
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "div",
+                  { staticStyle: { width: "100%", "text-align": "right" } },
+                  [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-secondary",
+                        attrs: { type: "button", "data-dismiss": "modal" }
+                      },
+                      [_vm._v("Close")]
+                    ),
+                    _vm._v(" "),
+                    _vm.login
+                      ? _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-primary",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                return _vm.authentication($event)
+                              }
+                            }
+                          },
+                          [_vm._v("Login")]
+                        )
+                      : _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-primary",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                return _vm.authentication($event)
+                              }
+                            }
+                          },
+                          [_vm._v("Register")]
+                        )
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticStyle: { width: "100%", "text-align": "left" } },
+                  [
+                    _vm.login
+                      ? _c("p", [
+                          _vm._v("Create New Account    "),
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-primary",
+                              attrs: { type: "button" },
+                              on: { click: _vm.changeLogin }
+                            },
+                            [_vm._v("Go To Register")]
+                          )
+                        ])
+                      : _c("p", [
+                          _vm._v("Are you have Account    "),
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-primary",
+                              attrs: { type: "button" },
+                              on: { click: _vm.changeLogin }
+                            },
+                            [_vm._v("Go To Login")]
+                          )
+                        ])
+                  ]
+                )
+              ])
             ])
           ]
         )
@@ -49140,22 +49711,17 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c(
-      "li",
-      {
-        staticClass: "list-inline-item mr-1",
-        attrs: {
-          type: "button",
-          "data-toggle": "modal",
-          "data-target": "#exampleModal"
-        }
-      },
-      [
-        _c("a", { staticClass: "nav-link" }, [
-          _c("i", { staticClass: "fa fa-user" })
-        ])
-      ]
-    )
+    return _c("a", { staticClass: "nav-link" }, [
+      _c("i", { staticClass: "fa fa-user" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("a", { staticClass: "nav-link" }, [
+      _c("i", { staticClass: "fas fa-sign-out-alt" })
+    ])
   },
   function() {
     var _vm = this
@@ -49171,47 +49737,18 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-header" }, [
-      _c(
-        "h5",
-        { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
-        [_vm._v("Login")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "close",
-          attrs: {
-            type: "button",
-            "data-dismiss": "modal",
-            "aria-label": "Close"
-          }
-        },
-        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-footer" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-secondary",
-          attrs: { type: "button", "data-dismiss": "modal" }
-        },
-        [_vm._v("Close")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        { staticClass: "btn btn-primary", attrs: { type: "button" } },
-        [_vm._v("Login")]
-      )
-    ])
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
   }
 ]
 render._withStripped = true
@@ -50070,8 +50607,16 @@ var render = function() {
                           _vm._v(" "),
                           _c("p", { staticClass: "totlePriceOneProduct" }, [
                             _vm._v(
-                              "\n                                    الاجمالى\n                                    " +
-                                _vm._s((book.price * book.count).toFixed(2)) +
+                              "\n\n                                    الاجمالى\n                                "
+                            ),
+                            _vm._v(
+                              "\n                                    " +
+                                _vm._s(
+                                  _vm.totlePriceOneProduct(
+                                    book.price,
+                                    book.count
+                                  )
+                                ) +
                                 "\n                                    ج.م\n                                "
                             )
                           ])
@@ -50086,7 +50631,7 @@ var render = function() {
                               staticClass: "plus",
                               on: {
                                 click: function($event) {
-                                  return _vm.increaseItem(index)
+                                  return _vm.increaseItem(book, index)
                                 }
                               }
                             },
@@ -50111,7 +50656,7 @@ var render = function() {
                               staticClass: "minus",
                               on: {
                                 click: function($event) {
-                                  return _vm.decreaseItem(index)
+                                  return _vm.decreaseItem(book, index)
                                 }
                               }
                             },
@@ -50125,7 +50670,91 @@ var render = function() {
                       ])
                     }),
                     _vm._v(" "),
-                    _vm._m(3)
+                    _c("div", { staticClass: "completeOrder mt-5" }, [
+                      _c("div", { staticClass: "calc" }, [
+                        _vm._m(3),
+                        _vm._v(" "),
+                        _c(
+                          "span",
+                          { staticClass: "float-left font-weight-bold" },
+                          [
+                            _vm._v(
+                              "\n                                    " +
+                                _vm._s(_vm.calcSum) +
+                                "\n                                    ج.م\n                                "
+                            )
+                          ]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _vm._m(4),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "modal fade",
+                          attrs: {
+                            id: "checkout",
+                            tabindex: "-1",
+                            role: "dialog",
+                            "aria-labelledby": "exampleModalLabel",
+                            "aria-hidden": "true"
+                          }
+                        },
+                        [
+                          _c(
+                            "div",
+                            {
+                              staticClass: "modal-dialog",
+                              attrs: { role: "document" }
+                            },
+                            [
+                              _c(
+                                "div",
+                                {
+                                  staticClass: "modal-content",
+                                  staticStyle: { direction: "ltr" }
+                                },
+                                [
+                                  _vm._m(5),
+                                  _vm._v(" "),
+                                  _vm._m(6),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "modal-footer" }, [
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass: "btn btn-secondary",
+                                        attrs: {
+                                          type: "button",
+                                          "data-dismiss": "modal"
+                                        }
+                                      },
+                                      [_vm._v("Close")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass: "btn btn-primary",
+                                        attrs: { type: "button" },
+                                        on: {
+                                          click: function($event) {
+                                            $event.preventDefault()
+                                            return _vm.getCheckoutId($event)
+                                          }
+                                        }
+                                      },
+                                      [_vm._v("Send message")]
+                                    )
+                                  ])
+                                ]
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ])
                   ],
                   2
                 )
@@ -50143,10 +50772,10 @@ var render = function() {
                       "router-link",
                       { staticClass: "backToStore", attrs: { to: "/" } },
                       [
-                        _c("i", { staticClass: "fas fa-angle-right" }),
                         _vm._v(
-                          "\n                            العودة للمتجر\n                        "
-                        )
+                          "\n                            العودة للمتجر\n                            "
+                        ),
+                        _c("i", { staticClass: "fas fa-angle-right" })
                       ]
                     )
                   ],
@@ -50203,12 +50832,62 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "completeOrder mt-5" }, [
-      _c("div", { staticClass: "calc" }, [
+    return _c("span", [
+      _c("i", { staticClass: "fas fa-calculator" }),
+      _vm._v(
+        "\n                                    مجموع السلة\n                                "
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "btn checkout",
+        attrs: { "data-toggle": "modal", "data-target": "#checkout" }
+      },
+      [
         _vm._v(
-          "\n                                المجموع\n                                35220\n                            "
-        )
-      ])
+          "\n                                اتمام الطلب\n                                "
+        ),
+        _c("i", { staticClass: "fas fa-chevron-left" })
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
+        [_vm._v("New message")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-body text-left" }, [
+      _c("div", { attrs: { id: "showPayForm" } })
     ])
   }
 ]
@@ -50257,12 +50936,6 @@ var render = function() {
               attrs: { "aria-labelledby": "dropdownSortButton" }
             },
             [
-              _vm._m(2),
-              _vm._v(" "),
-              _vm._m(3),
-              _vm._v(" "),
-              _vm._m(4),
-              _vm._v(" "),
               _c("div", { staticClass: "form-check" }, [
                 _c("input", {
                   staticClass: "form-check-input",
@@ -50448,81 +51121,6 @@ var staticRenderFns = [
         _c("i", { staticClass: "fas fa-bars" })
       ]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-check" }, [
-      _c("input", {
-        staticClass: "form-check-input",
-        attrs: {
-          type: "radio",
-          name: "sort",
-          checked: "",
-          id: "default",
-          value: "default"
-        }
-      }),
-      _vm._v(" "),
-      _c(
-        "label",
-        { staticClass: "form-check-label", attrs: { for: "default" } },
-        [_vm._v("\n                        مقترحاتنا\n                      ")]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-check" }, [
-      _c("input", {
-        staticClass: "form-check-input",
-        attrs: {
-          type: "radio",
-          name: "sort",
-          id: "bestSeller",
-          value: "bestSeller"
-        }
-      }),
-      _vm._v(" "),
-      _c(
-        "label",
-        { staticClass: "form-check-label", attrs: { for: "bestSeller" } },
-        [
-          _vm._v(
-            "\n                        الاكثر مبيعا\n                      "
-          )
-        ]
-      )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-check" }, [
-      _c("input", {
-        staticClass: "form-check-input",
-        attrs: {
-          type: "radio",
-          name: "sort",
-          id: "highRate",
-          value: "highRate"
-        }
-      }),
-      _vm._v(" "),
-      _c(
-        "label",
-        { staticClass: "form-check-label", attrs: { for: "highRate" } },
-        [
-          _vm._v(
-            "\n                          الاعلى تقيما\n                      "
-          )
-        ]
-      )
-    ])
   }
 ]
 render._withStripped = true

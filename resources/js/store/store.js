@@ -5,7 +5,9 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
     state: {
-        counter: 0
+        counter: 0,
+        storeToken: '',
+        // storeToken: localStorage.getItem("token") ? localStorage.getItem("token") : '',
     }
 });
 

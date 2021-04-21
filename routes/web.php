@@ -24,14 +24,31 @@ Route::get('/', function () {
     return view('layouts.frontend');
 });
 
+
+
+
+// Route Payment checkout 
+// Route::get('/get-checkout-id/{$price}', [PaymentProviderController::class, 'checkoutPaymentId']);
+
+
+
 // Route::get('/category', function () {
 //     return view('layouts.frontend');
 // });
 
+Route::get('dashboard/login', [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm']);
 
-Route::get('/dashboard', function () {
-    return view('layouts.dashboard');
+
+// Route::middleware('api.admin')->group(function () {
+Route::middleware('authAdminpanel')->group(function () {
+    // our routes to be protected will go in here must Admin
+    
+	Route::get('/dashboard', function () {
+	    return view('layouts.dashboard');
+	});
 });
+
+
 
 Route::get('/{path}', function () {
     return view('layouts.frontend');
